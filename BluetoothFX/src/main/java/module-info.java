@@ -10,6 +10,7 @@ module com.example.bluetoothfx {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.fazecast.jSerialComm;
+    requires eu.hansolo.medusa;
 
     opens com.example.bluetoothfx to javafx.fxml;
     exports com.example.bluetoothfx;

@@ -5,8 +5,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 
-
-
 public class BluetoothApp extends Application {
 
     @Override
@@ -16,9 +14,7 @@ public class BluetoothApp extends Application {
         stage.setTitle("Bluetooth Car");
         stage.setScene(scene);
         stage.show();
-
     }
-
 
     public static void main(String[] args) {
         launch();
