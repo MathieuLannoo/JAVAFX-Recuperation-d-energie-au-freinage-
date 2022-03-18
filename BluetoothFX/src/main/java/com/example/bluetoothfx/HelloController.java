@@ -1,23 +1,25 @@
 package com.example.bluetoothfx;
 
-//import eu.hansolo.medusa.Gauge;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
-
+import eu.hansolo.medusa.Gauge;
 public class HelloController {
 
 
 
     bluetooth connection = new bluetooth();
-    //@FXML public Gauge kmh;
-    @FXML public Button portail_bouton;
+
+    @FXML public Button test_button;
     @FXML public Label welcomeText;
     @FXML public ToggleButton toggle_salon;
     @FXML public ToggleButton toggle_chambre;
+    @FXML public Gauge gauge_test;
+    @FXML public Gauge battery_level;
+
 
     public void ConnectButton() {
 
@@ -47,9 +49,13 @@ public class HelloController {
             connection.send_command("3");
         }
     }
-    /*@FXML
-    public void test_def() {
-        kmh.setAnimated(true);
-        kmh.setValue(90.0);
-    }*/
+
+    public void onpress_test() {
+        System.out.println("test");
+        gauge_test.setValue(90);
+        battery_level.setAnimated(true);
+        battery_level.setValue(65);
+
+
+    }
 }

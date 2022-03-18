@@ -47,7 +47,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/medusa-17.1.5.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/medusa-17.0.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
