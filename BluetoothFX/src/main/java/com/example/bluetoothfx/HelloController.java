@@ -1,12 +1,13 @@
 package com.example.bluetoothfx;
 
-import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import eu.hansolo.medusa.Gauge;
+import javafx.scene.paint.Color;
+
+
 public class HelloController {
 
 
@@ -19,6 +20,7 @@ public class HelloController {
     @FXML public ToggleButton toggle_chambre;
     @FXML public Gauge gauge_test;
     @FXML public Gauge battery_level;
+
 
 
     public void ConnectButton() {
@@ -54,7 +56,9 @@ public class HelloController {
         System.out.println("test");
         gauge_test.setValue(90);
         battery_level.setAnimated(true);
-        battery_level.setValue(65);
+        battery_level.setBarColor(Color.GREEN);
+        battery_level.setValue(99);
+
 
 
     }

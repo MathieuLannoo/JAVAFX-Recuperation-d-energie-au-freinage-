@@ -10,6 +10,7 @@
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
 
 <BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bluetoothfx.HelloController">
    <center>
@@ -51,6 +52,19 @@
       <Gauge fx:id="gauge_test" skinType="SIMPLE_SECTION" BorderPane.alignment="CENTER" />
    </left>
    <right>
-      <Gauge fx:id="battery_level" skinType="BATTERY" BorderPane.alignment="CENTER" />
+      <Gauge fx:id="battery_level" skinType="BATTERY" tickLabelsVisible="false" BorderPane.alignment="CENTER">
+         <ledColor>
+            <Color red="0.21108771860599518" green="0.12460038810968399" blue="0.9894737005233765" />
+         </ledColor>
+         <needleColor>
+            <Color red="0.6421052813529968" green="0.6365562081336975" blue="0.6302144527435303" />
+         </needleColor>
+         <needleBorderColor>
+            <Color red="0.33547499775886536" green="0.28349998593330383" blue="0.6299999952316284" opacity="0.0" />
+         </needleBorderColor>
+         <thresholdColor>
+            <Color red="0.14459389448165894" green="0.08405458182096481" blue="0.8105263113975525" />
+         </thresholdColor>
+      </Gauge>
    </right>
 </BorderPane>
