@@ -1,39 +1,38 @@
 package com.example.bluetoothfx;
-import java.util.Scanner;
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
 
+import java.util.Arrays;
+
 class bluetooth {
 
+
     SerialPort activePort;
+    StringBuilder tram = new StringBuilder();
     SerialPort[] ports = SerialPort.getCommPorts();
-    public void showAllPort() {
-        int i = 0;
-        for(SerialPort port : ports) {
-            System.out.print(i + ". " + port.getDescriptivePortName() + " ");
-            System.out.println(port.getPortDescription());
-            i++;
-        }
-    }
+    int Connection_State = 0;
+
     public void send_command(String command){
 
         activePort.writeBytes(command.getBytes(), command.length());
     }
 
-    public void setPort(int portIndex) {
-        activePort = ports[portIndex];
-        if (activePort.openPort())
-            System.out.println(activePort.getDescriptivePortName() + " ouvert");
+    public void setPort(SerialPort Port) {
 
-        activePort.addDataListener(new SerialPortDataListener() {
+        if (Port.openPort())
+            System.out.println(Port.getDescriptivePortName() + " ouvert");
+            activePort = Port;
+            Connection_State = 1;
+
+        Port.addDataListener(new SerialPortDataListener() {
 
             @Override
             public void serialEvent(SerialPortEvent event) {
                 int size = event.getSerialPort().bytesAvailable();
                 byte[] buffer = new byte[size];
                 event.getSerialPort().readBytes(buffer, size);
-                StringBuilder tram = new StringBuilder();
+                tram.setLength(0);
                 for(byte b:buffer)
                     if(b != 0)
                         tram.append((char)b);
@@ -45,17 +44,5 @@ class bluetooth {
                 return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
             }
         });
-    }
-
-    public void start() {
-        showAllPort();
-        Scanner reader = new Scanner(System.in);
-        System.out.print("Port? ");
-        int p = reader.nextInt();
-        setPort(p);
-        /*System.out.print("Commande? ");
-        String cmd = reader.next();
-        send_command(cmd);*/
-        reader.close();
     }
 }

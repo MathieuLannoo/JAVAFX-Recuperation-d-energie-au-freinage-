@@ -12,7 +12,7 @@ public class BluetoothApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(BluetoothApp.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+        Scene scene = new Scene(fxmlLoader.load(), 1600, 900);
         stage.setTitle("Bluetooth Car");
         stage.setScene(scene);
         stage.show();
