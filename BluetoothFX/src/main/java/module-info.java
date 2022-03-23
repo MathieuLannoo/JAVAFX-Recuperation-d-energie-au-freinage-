@@ -11,6 +11,7 @@ module com.example.bluetoothfx {
     requires eu.hansolo.tilesfx;
     requires com.fazecast.jSerialComm;
     requires eu.hansolo.medusa;
+    requires jinput;
 
     opens com.example.bluetoothfx to javafx.fxml;
     exports com.example.bluetoothfx;

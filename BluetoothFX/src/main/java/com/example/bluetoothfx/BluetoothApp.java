@@ -16,7 +16,6 @@ public class BluetoothApp extends Application {
         stage.setTitle("Bluetooth Car");
         stage.setScene(scene);
         stage.show();
-
     }
 
 

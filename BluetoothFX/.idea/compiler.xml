@@ -13,4 +13,9 @@
       <module name="BluetoothFX" target="17" />
     </bytecodeTargetLevel>
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="BluetoothFX" options="--add-exports jdk.internal.opt/jdk.internal.joptsimple.internal=com.example.bluetoothfx" />
+    </option>
+  </component>
 </project>
