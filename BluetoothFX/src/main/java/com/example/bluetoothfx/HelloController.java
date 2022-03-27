@@ -71,7 +71,7 @@ public class HelloController {
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
                 int accelerate = t1.intValue();
                 if (accelerate != old_value){
-                    String cmd = "accelerer: |"+accelerate + "|";
+                    String cmd = "acc: |"+accelerate + "|";
                     System.out.println(cmd);
                     connection.send_command(cmd);
                     old_value = accelerate;
@@ -85,7 +85,7 @@ public class HelloController {
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
                 int turn = t1.intValue();
                 if (turn != old_value){
-                    String cmd = "tourner: |" + turn + "|";
+                    String cmd = "turn: |" + turn + "|";
                     System.out.println(cmd);
                     connection.send_command(cmd);
                     old_value = turn;
