@@ -14,8 +14,8 @@ class bluetooth {
     int Connection_State = 0;
 
     public void send_command(String command){
-
-        activePort.writeBytes(command.getBytes(), command.length());
+        String cmd_sent = command + "#";
+        activePort.writeBytes(cmd_sent.getBytes(), cmd_sent.length());
     }
 
     public void setPort(SerialPort Port) {
