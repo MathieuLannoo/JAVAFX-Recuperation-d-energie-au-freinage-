@@ -60,8 +60,8 @@ all: main-build
 main-build: Bluetooth.elf secondary-outputs
 
 # Tool invocations
-Bluetooth.elf: $(OBJS) $(USER_OBJS) G:\Mon\ Drive\Etudes\M1\Projet\ M1\Projet\ Domotique\ STM32\ BOUHET\ LANNOO\ SIOEN\Bluetooth\STM32L152RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Bluetooth.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"G:\Mon Drive\Etudes\M1\Projet M1\Projet Domotique STM32 BOUHET LANNOO SIOEN\Bluetooth\STM32L152RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Bluetooth.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Bluetooth.elf: $(OBJS) $(USER_OBJS) C:\Users\mathi\Documents\GitHub\Java-Projet-STM32\Bluetooth\STM32L152RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Bluetooth.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\mathi\Documents\GitHub\Java-Projet-STM32\Bluetooth\STM32L152RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Bluetooth.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
