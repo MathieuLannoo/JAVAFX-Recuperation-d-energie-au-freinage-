@@ -67,14 +67,6 @@ void Error_Handler(void);
 #define USART_RX_GPIO_Port GPIOA
 #define LD2_Pin GPIO_PIN_5
 #define LD2_GPIO_Port GPIOA
-#define LED0_Pin GPIO_PIN_1
-#define LED0_GPIO_Port GPIOB
-#define LED1_Pin GPIO_PIN_2
-#define LED1_GPIO_Port GPIOB
-#define LED_ACCES_Pin GPIO_PIN_11
-#define LED_ACCES_GPIO_Port GPIOB
-#define RC522_CS_Pin GPIO_PIN_6
-#define RC522_CS_GPIO_Port GPIOC
 #define BLUETOOTH_STATE_Pin GPIO_PIN_8
 #define BLUETOOTH_STATE_GPIO_Port GPIOA
 #define TMS_Pin GPIO_PIN_13
@@ -83,8 +75,6 @@ void Error_Handler(void);
 #define TCK_GPIO_Port GPIOA
 #define SWO_Pin GPIO_PIN_3
 #define SWO_GPIO_Port GPIOB
-#define RC522_Rst_Pin GPIO_PIN_6
-#define RC522_Rst_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

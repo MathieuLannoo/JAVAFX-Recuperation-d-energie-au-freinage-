@@ -1,6 +1,6 @@
 ################################################################################
 # Automatically-generated file. Do not edit!
-# Toolchain: GNU Tools for STM32 (9-2020-q2-update)
+# Toolchain: GNU Tools for STM32 (10.3-2021.10)
 ################################################################################
 
 -include ../makefile.init
@@ -43,14 +43,14 @@ BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ART
 EXECUTABLES += \
 Bluetooth.elf \
 
+MAP_FILES += \
+Bluetooth.map \
+
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
 Bluetooth.list \
-
-OBJCOPY_BIN += \
-Bluetooth.bin \
 
 
 # All Target
@@ -60,8 +60,8 @@ all: main-build
 main-build: Bluetooth.elf secondary-outputs
 
 # Tool invocations
-Bluetooth.elf: $(OBJS) $(USER_OBJS) C:\Users\mathi\Documents\GitHub\Java-Projet-STM32\Bluetooth\STM32L152RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Bluetooth.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\mathi\Documents\GitHub\Java-Projet-STM32\Bluetooth\STM32L152RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Bluetooth.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Bluetooth.elf Bluetooth.map: $(OBJS) $(USER_OBJS) D:\Documents\GitHub\Java-Projet-STM32\Bluetooth\STM32L152RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Bluetooth.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"D:\Documents\GitHub\Java-Projet-STM32\Bluetooth\STM32L152RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Bluetooth.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -75,17 +75,12 @@ Bluetooth.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-Bluetooth.bin: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "Bluetooth.bin"
-	@echo 'Finished building: $@'
-	@echo ' '
-
 # Other Targets
 clean:
-	-$(RM) Bluetooth.bin Bluetooth.elf Bluetooth.list default.size.stdout
+	-$(RM) Bluetooth.elf Bluetooth.list Bluetooth.map default.size.stdout
 	-@echo ' '
 
-secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_BIN)
+secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
 
 fail-specified-linker-script-missing:
 	@echo 'Error: Cannot find the specified linker script. Check the linker settings in the build configuration.'
