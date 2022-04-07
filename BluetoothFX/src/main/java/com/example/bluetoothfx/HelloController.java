@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import eu.hansolo.medusa.Gauge;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 
@@ -58,7 +59,6 @@ public class HelloController {
         }
     };
 
-
     public void initialize() {
         battery_level.setAnimated(true);
         connection_status_gauge.setAnimated(true);
@@ -69,7 +69,7 @@ public class HelloController {
             int old_value = 100;
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                int accelerate = t1.intValue();
+                int accelerate = -1 * t1.intValue();
                 if (accelerate != old_value){
                     String cmd = "acc: |"+accelerate + "|";
                     System.out.println(cmd);
@@ -138,5 +138,9 @@ public class HelloController {
     public void choiceport_validation() {
         System.out.println("validation du port...");
 
+    }
+
+    public void mouse_released() {
+        scrollbar_forward.setValue(0);
     }
 }
