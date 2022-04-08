@@ -103,14 +103,6 @@ public class gamepad {
                     if (Objects.equals(component.getName(), "Axe Z")) {
                         acceleration_gamepad = axisValueInPercentage;
                     }
-                    /*
-                    // Other axis
-                    JLabel progressBarLabel = new JLabel(component.getName());
-                    JProgressBar progressBar = new JProgressBar(0, 100);
-                    progressBar.setValue(axisValueInPercentage);*/
-
-                   /* axesPanel.add(progressBarLabel);
-                    axesPanel.add(progressBar);*/
                 }
 
             }

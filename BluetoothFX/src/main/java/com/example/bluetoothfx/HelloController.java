@@ -35,7 +35,6 @@ public class HelloController {
     @FXML
     private Gauge gauge_test;
 
-
     @FXML
     private ToggleButton toggle_chambre;
 
@@ -60,22 +59,26 @@ public class HelloController {
             battery_level.setValue(0);
         }
     };
+
     Thread start_gamepad = new Thread() {
         public void run() {
-            if(Xbox_gamepad.ConnectedGamepad != null)
+            if(Xbox_gamepad.ConnectedGamepad != null){
                 while(true){
                     Xbox_gamepad.RefreshControllerData();
                     scrollbar_forward.setValue(Xbox_gamepad.acceleration_gamepad);
                     scrollbar_turn.setValue(Xbox_gamepad.direction_gamepad);
 
                     if( !Xbox_gamepad.ConnectedGamepad.poll() ){
+                        scrollbar_forward.setValue(50);
                         System.out.println("manette deconnectée");
                         break;
                     }
                 }
+            }
             else
-                System.out.println("No controller found!");
+                System.out.println("Pas de manette connectée!");
         }
+
     };
     public void initialize() {
         start_gamepad.start();
@@ -102,7 +105,6 @@ public class HelloController {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
                 int turn = t1.intValue();
-
                 if (turn<= old_value-3 || turn >=old_value+3){
                     String cmd = "t|" + turn + "|";
                     System.out.println(cmd);
@@ -113,50 +115,13 @@ public class HelloController {
         });
     }
 
-
     public void ConnectButton() {
         selected_value =  bluetooth_portlist.getValue();
         ConnectionPortTask.start();
     }
 
-    @FXML
-    public void OpenButton() {
-        connection.send_command("4");
-    }
-
-    @FXML
-    public void Toggle_Button_Salon() {
-        if (toggle_salon.isSelected()){
-            connection.send_command("1");
-        }
-        else{
-            connection.send_command("0");
-        }
-    }
-    @FXML
-    public void toogle_button_Chambre() {
-        if (toggle_chambre.isSelected()){
-            connection.send_command("2");
-        }
-        else{
-            connection.send_command("3");
-        }
-    }
-
-    public void onpress_test() {
-
-        System.out.println("vive les animations :)");
-
-    }
-
-
-
-    public void choiceport_validation() {
-        System.out.println("validation du port...");
-
-    }
-
     public void mouse_released() {
         scrollbar_forward.setValue(50);
+        scrollbar_turn.setValue(50);
     }
 }

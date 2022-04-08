@@ -3,11 +3,8 @@
 <?import eu.hansolo.medusa.Gauge?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollBar?>
-<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
@@ -20,22 +17,9 @@
               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
           </padding>
          <AnchorPane prefHeight="306.0" prefWidth="786.0">
-            <children>
-               <ScrollBar fx:id="scrollbar_turn" layoutX="505.0" layoutY="110.0" prefHeight="84.0" prefWidth="260.0" value="50.0" />
-               <ScrollBar fx:id="scrollbar_forward" layoutX="147.0" layoutY="7.0" onMouseReleased="#mouse_released" orientation="VERTICAL" prefHeight="282.0" prefWidth="96.0" value="50.0" />
-            </children>
+            <ScrollBar fx:id="scrollbar_turn" layoutX="505.0" layoutY="110.0" onMouseReleased="#mouse_released" prefHeight="84.0" prefWidth="260.0" value="50.0" />
+            <ScrollBar fx:id="scrollbar_forward" layoutX="147.0" layoutY="7.0" onMouseReleased="#mouse_released" orientation="VERTICAL" prefHeight="282.0" prefWidth="96.0" value="50.0" />
          </AnchorPane>
-         <ButtonBar prefHeight="20.0" prefWidth="1325.0">
-            <padding>
-               <Insets bottom="5.0" left="5.0" right="10.0" top="5.0" />
-            </padding>
-         </ButtonBar>
-         <Button fx:id="test_button" mnemonicParsing="false" onAction="#onpress_test" prefHeight="25.0" prefWidth="46.0" text="test" />
-      
-          <Label fx:id="welcomeText" />
-          <Button fx:id="open_portail" onAction="#OpenButton" text="Ouvre le portail" />
-         <ToggleButton fx:id="toggle_salon" mnemonicParsing="false" onAction="#Toggle_Button_Salon" text="Lumière Salon" />
-         <ToggleButton fx:id="toggle_chambre" layoutX="363.0" layoutY="389.0" mnemonicParsing="false" onAction="#toogle_button_Chambre" text="Lumière Chambre" />
       </VBox>
    </center>
    <left>
@@ -62,11 +46,9 @@
    </bottom>
    <top>
       <AnchorPane prefHeight="50.0" prefWidth="1325.0" BorderPane.alignment="CENTER">
-         <children>
-            <ChoiceBox fx:id="bluetooth_portlist" layoutX="914.0" layoutY="20.0" prefWidth="150.0" />
-            <Button layoutX="1070.0" layoutY="20.0" minHeight="-Infinity" minWidth="30.0" mnemonicParsing="false" onAction="#ConnectButton" prefHeight="25.0" text="Connect" />
-            <Gauge fx:id="connection_status_gauge" customTickLabelFontSize="11.0" layoutX="1148.0" layoutY="1.0" prefHeight="50.0" prefWidth="161.0" skinType="CHARGE" />
-         </children>
+         <ChoiceBox fx:id="bluetooth_portlist" layoutX="914.0" layoutY="20.0" prefWidth="150.0" />
+         <Button layoutX="1070.0" layoutY="20.0" minHeight="-Infinity" minWidth="30.0" mnemonicParsing="false" onAction="#ConnectButton" prefHeight="25.0" text="Connect" />
+         <Gauge fx:id="connection_status_gauge" customTickLabelFontSize="11.0" layoutX="1148.0" layoutY="1.0" prefHeight="50.0" prefWidth="161.0" skinType="CHARGE" />
       </AnchorPane>
    </top>
 </BorderPane>
