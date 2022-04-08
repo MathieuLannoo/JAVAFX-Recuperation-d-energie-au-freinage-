@@ -15,7 +15,7 @@ import javafx.scene.paint.Color;
 
 
 public class HelloController {
-
+    gamepad Xbox_gamepad = new gamepad();
     SerialPort selected_value;
     bluetooth connection = new bluetooth();
 
@@ -42,6 +42,8 @@ public class HelloController {
     @FXML
     private ToggleButton toggle_salon;
 
+
+
     Thread ConnectionPortTask = new Thread() {
         public void run() {
             connection.setPort(selected_value);
@@ -58,19 +60,25 @@ public class HelloController {
             battery_level.setValue(0);
         }
     };
-
+    Thread start_gamepad = new Thread() {
+        public void run() {
+            if(Xbox_gamepad.ConnectedGamepad != null)
+                Xbox_gamepad.startShowingControllerData();
+            else
+                System.out.println("No controller found!");
+        }
+    };
     public void initialize() {
+        start_gamepad.start();
         battery_level.setAnimated(true);
         connection_status_gauge.setAnimated(true);
         battery_level.setBarColor(Color.GREEN);
         bluetooth_portlist.getItems().addAll(connection.ports);
-
         scrollbar_forward.valueProperty().addListener(new ChangeListener<Number>() {
             int old_value = 100;
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
                 int accelerate = -1 * t1.intValue();
-
                 if (accelerate<= old_value-2 || accelerate >=old_value+2){
                     String cmd = "a|"+accelerate + "|";
                     System.out.println(cmd);
@@ -95,7 +103,6 @@ public class HelloController {
             }
         });
     }
-
 
 
     public void ConnectButton() {
@@ -130,8 +137,6 @@ public class HelloController {
     public void onpress_test() {
 
         System.out.println("vive les animations :)");
-
-
 
     }
 
