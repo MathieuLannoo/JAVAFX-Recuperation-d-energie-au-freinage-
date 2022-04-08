@@ -30,22 +30,13 @@ public class gamepad {
         }
     }
 
-    public void startShowingControllerData(){
-        while(true)
-        {
+    public void RefreshControllerData(){
 
-            System.out.println("direction:  " + direction_gamepad);
-            System.out.println("acceleration:  " + acceleration_gamepad);
-            // Currently selected controller.
-            //int selectedControllerIndex = window.getSelectedControllerName();
-            //Controller controller = foundControllers.get(selectedControllerIndex);
+            //System.out.println("direction:  " + direction_gamepad);
+            //System.out.println("acceleration:  " + acceleration_gamepad);
+
             Controller controller = ConnectedGamepad;
             // Pull controller for current data, and break while loop if controller is disconnected.
-            if( !controller.poll() ){
-                System.out.println("manette deconnectée");
-                break;
-            }
-
             // X axis and Y axis
             int xAxisPercentage = 0;
             int yAxisPercentage = 0;
@@ -123,14 +114,14 @@ public class gamepad {
                 }
 
             }
-            direction_gamepad = 100 - xAxisPercentage;
+            direction_gamepad = xAxisPercentage;
             try {
-                Thread.sleep(25);
+                Thread.sleep(5);
             } catch (InterruptedException ex) {
                 //Logger.getLogger(JoystickTest.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }
+
 
 
 

@@ -63,7 +63,16 @@ public class HelloController {
     Thread start_gamepad = new Thread() {
         public void run() {
             if(Xbox_gamepad.ConnectedGamepad != null)
-                Xbox_gamepad.startShowingControllerData();
+                while(true){
+                    Xbox_gamepad.RefreshControllerData();
+                    scrollbar_forward.setValue(Xbox_gamepad.acceleration_gamepad);
+                    scrollbar_turn.setValue(Xbox_gamepad.direction_gamepad);
+
+                    if( !Xbox_gamepad.ConnectedGamepad.poll() ){
+                        System.out.println("manette deconnectée");
+                        break;
+                    }
+                }
             else
                 System.out.println("No controller found!");
         }
@@ -78,8 +87,8 @@ public class HelloController {
             int old_value = 100;
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                int accelerate = -1 * t1.intValue();
-                if (accelerate<= old_value-2 || accelerate >=old_value+2){
+                int accelerate = 100 - t1.intValue();
+                if (accelerate != old_value){
                     String cmd = "a|"+accelerate + "|";
                     System.out.println(cmd);
                     connection.send_command(cmd);
@@ -94,7 +103,7 @@ public class HelloController {
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
                 int turn = t1.intValue();
 
-                if (turn<= old_value-6 || turn >=old_value+6){
+                if (turn<= old_value-3 || turn >=old_value+3){
                     String cmd = "t|" + turn + "|";
                     System.out.println(cmd);
                     connection.send_command(cmd);
@@ -148,6 +157,6 @@ public class HelloController {
     }
 
     public void mouse_released() {
-        scrollbar_forward.setValue(0);
+        scrollbar_forward.setValue(50);
     }
 }

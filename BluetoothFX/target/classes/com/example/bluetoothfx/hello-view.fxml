@@ -21,8 +21,8 @@
           </padding>
          <AnchorPane prefHeight="306.0" prefWidth="786.0">
             <children>
-               <ScrollBar fx:id="scrollbar_turn" layoutX="505.0" layoutY="110.0" min="-100.0" prefHeight="84.0" prefWidth="260.0" />
-               <ScrollBar fx:id="scrollbar_forward" layoutX="147.0" layoutY="7.0" min="-100.0" onMouseReleased="#mouse_released" orientation="VERTICAL" prefHeight="282.0" prefWidth="96.0" />
+               <ScrollBar fx:id="scrollbar_turn" layoutX="505.0" layoutY="110.0" prefHeight="84.0" prefWidth="260.0" value="50.0" />
+               <ScrollBar fx:id="scrollbar_forward" layoutX="147.0" layoutY="7.0" onMouseReleased="#mouse_released" orientation="VERTICAL" prefHeight="282.0" prefWidth="96.0" value="50.0" />
             </children>
          </AnchorPane>
          <ButtonBar prefHeight="20.0" prefWidth="1325.0">
