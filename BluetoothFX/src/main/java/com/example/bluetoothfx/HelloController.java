@@ -70,8 +70,9 @@ public class HelloController {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
                 int accelerate = -1 * t1.intValue();
-                if (accelerate != old_value){
-                    String cmd = "acc: |"+accelerate + "|";
+
+                if (accelerate<= old_value-2 || accelerate >=old_value+2){
+                    String cmd = "a|"+accelerate + "|";
                     System.out.println(cmd);
                     connection.send_command(cmd);
                     old_value = accelerate;
@@ -84,8 +85,9 @@ public class HelloController {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
                 int turn = t1.intValue();
-                if (turn != old_value){
-                    String cmd = "turn: |" + turn + "|";
+
+                if (turn<= old_value-6 || turn >=old_value+6){
+                    String cmd = "t|" + turn + "|";
                     System.out.println(cmd);
                     connection.send_command(cmd);
                     old_value = turn;
