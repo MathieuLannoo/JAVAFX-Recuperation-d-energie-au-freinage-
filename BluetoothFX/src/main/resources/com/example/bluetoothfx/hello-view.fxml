@@ -2,8 +2,12 @@
 
 <?import eu.hansolo.medusa.Gauge?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -16,6 +20,15 @@
           <padding>
               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
           </padding>
+         <LineChart fx:id="test_chart" legendVisible="false" prefHeight="268.0" prefWidth="827.0" title="Conso">
+           <xAxis>
+             <CategoryAxis side="BOTTOM" tickLabelsVisible="false" tickMarkVisible="false" fx:id="x" />
+           </xAxis>
+           <yAxis>
+             <NumberAxis fx:id="y" autoRanging="false" label="Ampère" side="LEFT" />
+           </yAxis>
+         </LineChart>
+         <Label fx:id="test_label" prefHeight="31.0" prefWidth="101.0" text="Test" />
          <AnchorPane prefHeight="306.0" prefWidth="786.0">
             <ScrollBar fx:id="scrollbar_turn" layoutX="505.0" layoutY="110.0" onMouseReleased="#mouse_released" prefHeight="84.0" prefWidth="260.0" value="50.0" />
             <ScrollBar fx:id="scrollbar_forward" layoutX="147.0" layoutY="7.0" onMouseReleased="#mouse_released" orientation="VERTICAL" prefHeight="282.0" prefWidth="96.0" value="50.0" />
