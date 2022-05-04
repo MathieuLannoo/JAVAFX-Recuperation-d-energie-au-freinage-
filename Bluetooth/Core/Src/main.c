@@ -61,6 +61,10 @@ int born2= 0;
 int acceleration_turn_command;
 int pulse = 0;
 
+//test variable
+int compteur = 0;
+char compteur_car[10];
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -80,6 +84,7 @@ void Test_connection(void){
 	state = HAL_GPIO_ReadPin(BLUETOOTH_STATE_GPIO_Port, BLUETOOTH_STATE_Pin);
 	if(state == 0){
 		print_now = "NO CONNECTION";
+		TIM4->CCR4 = 300;
 	}
 	else if(state == 1){
 		print_now = "CONNECTED";
@@ -91,7 +96,7 @@ void Test_connection(void){
 		print_old = print_now;
 	}
 }
-int conversion_char_int()
+void conversion_char_int()
 {
 	for(buff = 0; buff<strlen(command_sent);++buff){
 				if(command_sent[buff]=='|' && born1 != 0){
@@ -105,24 +110,19 @@ int conversion_char_int()
 				strncat(number_convertion,&command_sent[born1],1);
 			}
 			acceleration_turn_command = atoi(number_convertion);
-			//printf("number = %d\r\n",acceleration_turn_command);
 			born1=0;
 			born2=0;
 			number_convertion[0] = 0;
+			pulse = map(acceleration_turn_command,0,100,200,400); //servo 240-400, moteur 200-400
 			if(command_sent[0]=='a'){
-						printf("j accelere\r\n");
-						pulse = map(acceleration_turn_command,0,100,200,400); //servo 240-400, moteur 200-400
-						//__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_3, pulse);
 						TIM4->CCR4 = pulse;
+						printf("acceleration: %d  %d\r\n",acceleration_turn_command,pulse);
 					}
-					else if(command_sent[0]=='t'){
-							pulse = map(acceleration_turn_command,0,100,200,400); //servo 240-400, moteur 200-400
-							//__HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_3, pulse);
-							TIM4->CCR3 = pulse;
-							printf("je tourne %d\r\n",pulse);
+			else if(command_sent[0]=='t'){
+						TIM4->CCR3 = pulse;
+						printf("direction: %d  %d\r\n",acceleration_turn_command,pulse);
 					}
 			command_sent[0] = 0;
-			return acceleration_turn_command;
 }
 
 /* USER CODE END PFP */
@@ -449,7 +449,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   if (htim == &htim2 ) // si on est dans le timer 2
   {
 	if (state == 1){ // si la connexion est vérifiée
-
+		//compteur++;
+		//sprintf(compteur_car, "%d", compteur);
+		//strcat(compteur_car,)
+		//printf("%s\r\n", compteur_car);
 		uint8_t data[] = "test_envoi\r\n"; // Indication pour dire que la stm est connectée
 		//uint8_t end[] = ""; // Format pour le port série
 		HAL_UART_Transmit (&huart1, data, sizeof(data), 1); // Transmission UART
@@ -481,8 +484,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 	if (test[0] == '#'){
 
-		printf("%s\r\n",command_sent);
-		printf("%d\r\n",conversion_char_int());
+
+		conversion_char_int();
 	}
 	else{
 		strncat(command_sent,&test[0],1);
