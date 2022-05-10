@@ -22,7 +22,8 @@ import java.text.SimpleDateFormat;
 
 
 public class HelloController {
-    XYChart.Series<String, Number> series = new XYChart.Series<>();
+    XYChart.Series<String, Number> Conso_Batterie1 = new XYChart.Series<>();
+    XYChart.Series<String, Number> Conso_Batterie2 = new XYChart.Series<>();
     
     gamepad Xbox_gamepad = new gamepad();
     SerialPort selected_value;
@@ -38,9 +39,6 @@ public class HelloController {
 
     @FXML
     private LineChart<String, Number> test_chart;
-
-    @FXML
-    private Label test_label;
     @FXML
     private CategoryAxis x;
     @FXML
@@ -54,7 +52,10 @@ public class HelloController {
     private Gauge battery_level;
     @FXML
     public Gauge connection_status_gauge;
-
+    @FXML
+    public Gauge direction_gauge;
+    @FXML
+    public Gauge acceleration_gauge;
     @FXML
     private ChoiceBox<SerialPort> bluetooth_portlist;
 
@@ -66,18 +67,10 @@ public class HelloController {
             connection.setPort(selected_value);
             if (connection.Connection_State == 1)
                 connection_status_gauge.setValue(100);
-            gauge_test.setValue(90);
-            battery_level.setValue(99);
-            try {
-                Thread.sleep(800);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            gauge_test.setValue(0);
-            battery_level.setValue(0);
+            acceleration_gauge.setAnimated(false);
+            direction_gauge.setAnimated(false);
             ConnectionPortTask.stop();
-        }
-    };
+    }};
 
     Thread start_gamepad = new Thread() {
         public void run() {
@@ -86,14 +79,16 @@ public class HelloController {
                     Xbox_gamepad.RefreshControllerData();
                     scrollbar_forward.setValue(Xbox_gamepad.acceleration_gamepad);
                     scrollbar_turn.setValue(Xbox_gamepad.direction_gamepad);
+
+
+
                     if( !Xbox_gamepad.ConnectedGamepad.poll() ){
                         scrollbar_forward.setValue(50);
                         System.out.println("manette deconnectée");
                         break;
                     }
                     if (new_tram_reception == true){
-                        //test_label.setText(tram.toString());
-                        //System.out.println(tram);
+
                         new_tram_reception = false;
                     }
                 }
@@ -104,7 +99,6 @@ public class HelloController {
 
     };
     public void initialize() {
-        test_label.setText("");
         start_gamepad.start();
         battery_level.setAnimated(true);
         connection_status_gauge.setAnimated(true);
@@ -118,6 +112,9 @@ public class HelloController {
                 int accelerate = 100 - t1.intValue();
                 if (accelerate != old_value){
                     String cmd = "a|"+accelerate + "|";
+                    Platform.runLater(() -> {
+                        acceleration_gauge.setValue(accelerate);
+                    });
                     System.out.println(cmd);
                     connection.send_command(cmd);
                     old_value = accelerate;
@@ -139,13 +136,14 @@ public class HelloController {
             }
         });
         //graph settings
-        series.setName("conso real time");
-        test_chart.getData().add(series);
+        Conso_Batterie1.setName("conso real time");
+        test_chart.getData().add(Conso_Batterie1);
+        test_chart.getData().add(Conso_Batterie2);
         test_chart.setAnimated(false);
         test_chart.setCreateSymbols(false); //cache les points
         test_chart.setHorizontalGridLinesVisible(false);
         test_chart.setVerticalGridLinesVisible(false);
-        //series.getData().add(new XYChart.Data<>("2", 70));
+
     }
 
     public void ConnectButton() {
@@ -155,7 +153,6 @@ public class HelloController {
 
             int compteur = 0;
             final int WINDOW_SIZE = 50;
-            Random rand = new Random();
             @Override
             public void serialEvent(SerialPortEvent event) {
                 int size = event.getSerialPort().bytesAvailable();
@@ -192,10 +189,23 @@ public class HelloController {
                         list.clear();
                     }
                     Platform.runLater(() -> {
-                        if (series.getData().size() > WINDOW_SIZE)
-                            series.getData().remove(0);
-                        series.getData().add(new XYChart.Data<>(String.valueOf(compteur), rand.nextInt(100)));
-                       //series.getData().add(new XYChart.Data<>(String.valueOf(compteur), rand.nextInt(100)));
+                        if (Conso_Batterie1.getData().size() > WINDOW_SIZE) //Effet de translation au niveau du graph
+                            Conso_Batterie1.getData().remove(0);
+                        if(Conso_Batterie2.getData().size() > WINDOW_SIZE) //Effet de translation au niveau du graph
+                            Conso_Batterie2.getData().remove(0);
+
+                        if (battery_Voltage > 1){
+                            battery_level.setValue((battery_Voltage - 7.9) * (100) / (9.25 - 7.9));
+                        }
+                        else{
+                            battery_level.setValue(0);
+                        }
+
+                        Conso_Batterie1.getData().add(new XYChart.Data<>(String.valueOf(compteur), Intensite_1*-1));
+                        Conso_Batterie2.getData().add(new XYChart.Data<>(String.valueOf(compteur), Intensite_2*-1));
+                        //Conso_Batterie1.getData().add(new XYChart.Data<>(String.valueOf(compteur), rand.nextInt(100)));
+                        //Conso_Batterie2.getData().add(new XYChart.Data<>(String.valueOf(compteur), rand.nextInt(100)));
+
 
                         //test_label.setText("yo");
                     });

@@ -7,10 +7,10 @@
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 
@@ -20,24 +20,18 @@
           <padding>
               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
           </padding>
-         <LineChart fx:id="test_chart" legendVisible="false" prefHeight="268.0" prefWidth="827.0" title="Conso">
-           <xAxis>
-             <CategoryAxis side="BOTTOM" tickLabelsVisible="false" tickMarkVisible="false" fx:id="x" />
-           </xAxis>
-           <yAxis>
-             <NumberAxis fx:id="y" autoRanging="false" label="Ampère" side="LEFT" />
-           </yAxis>
-         </LineChart>
-         <Label fx:id="test_label" prefHeight="18.0" prefWidth="506.0" text="Test" />
-         <AnchorPane prefHeight="306.0" prefWidth="786.0">
+         <AnchorPane prefHeight="484.0" prefWidth="1036.0">
             <ScrollBar fx:id="scrollbar_turn" layoutX="505.0" layoutY="110.0" onMouseReleased="#mouse_released" prefHeight="84.0" prefWidth="260.0" value="50.0" />
             <ScrollBar fx:id="scrollbar_forward" layoutX="147.0" layoutY="7.0" onMouseReleased="#mouse_released" orientation="VERTICAL" prefHeight="282.0" prefWidth="96.0" value="50.0" />
+            <AnchorPane layoutX="253.0" layoutY="158.0" prefHeight="110.0" prefWidth="91.0">
+               <children>
+                  <Gauge fx:id="direction_gauge" layoutX="20.0" layoutY="7.0" prefHeight="94.0" prefWidth="106.0" skinType="SIMPLE_SECTION" valueVisible="false" />
+                  <Gauge fx:id="acceleration_gauge" layoutX="135.0" layoutY="7.0" minValue="50.0" prefHeight="94.0" prefWidth="104.0" skinType="SIMPLE_SECTION" valueVisible="false" />
+               </children>
+            </AnchorPane>
          </AnchorPane>
       </VBox>
    </center>
-   <left>
-      <Gauge fx:id="gauge_test" skinType="SIMPLE_SECTION" BorderPane.alignment="CENTER" />
-   </left>
    <right>
       <Gauge fx:id="battery_level" skinType="BATTERY" tickLabelsVisible="false" BorderPane.alignment="CENTER">
          <ledColor>
@@ -55,10 +49,24 @@
       </Gauge>
    </right>
    <bottom>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox prefHeight="94.0" prefWidth="974.0">
+               <children>
+                  <LineChart fx:id="test_chart" prefHeight="74.0" prefWidth="1036.0" title="Consommation">
+                    <xAxis>
+                      <CategoryAxis side="BOTTOM" tickLabelsVisible="false" tickMarkVisible="false" fx:id="x" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis fx:id="y" autoRanging="false" label="Puissance en W" side="LEFT" upperBound="40.0" />
+                    </yAxis>
+                  </LineChart>
+               </children>
+            </HBox>
+         </children></VBox>
    </bottom>
    <top>
-      <AnchorPane prefHeight="50.0" prefWidth="1325.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="70.0" prefWidth="1326.0" BorderPane.alignment="CENTER">
          <ChoiceBox fx:id="bluetooth_portlist" layoutX="914.0" layoutY="20.0" prefWidth="150.0" />
          <Button layoutX="1070.0" layoutY="20.0" minHeight="-Infinity" minWidth="30.0" mnemonicParsing="false" onAction="#ConnectButton" prefHeight="25.0" text="Connect" />
          <Gauge fx:id="connection_status_gauge" customTickLabelFontSize="11.0" layoutX="1148.0" layoutY="1.0" prefHeight="50.0" prefWidth="161.0" skinType="CHARGE" />
