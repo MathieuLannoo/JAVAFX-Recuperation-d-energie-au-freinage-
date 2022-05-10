@@ -14,6 +14,8 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import eu.hansolo.medusa.Gauge;
 import javafx.scene.paint.Color;
+
+import java.util.ArrayList;
 import java.util.Random;
 
 import java.text.SimpleDateFormat;
@@ -21,11 +23,18 @@ import java.text.SimpleDateFormat;
 
 public class HelloController {
     XYChart.Series<String, Number> series = new XYChart.Series<>();
+    
     gamepad Xbox_gamepad = new gamepad();
     SerialPort selected_value;
     boolean new_tram_reception = false;
     bluetooth connection = new bluetooth();
     StringBuilder tram = new StringBuilder();
+    ArrayList<Integer> list = new ArrayList<>();
+
+    float battery_Voltage;
+    float condensator_Voltage;
+    float Intensite_1;
+    float Intensite_2;
 
     @FXML
     private LineChart<String, Number> test_chart;
@@ -84,7 +93,7 @@ public class HelloController {
                     }
                     if (new_tram_reception == true){
                         //test_label.setText(tram.toString());
-                        System.out.println(tram);
+                        //System.out.println(tram);
                         new_tram_reception = false;
                     }
                 }
@@ -156,16 +165,39 @@ public class HelloController {
                     if(b != 0)
                         tram.append((char)b);
                 }
-
                 if (tram.indexOf("\n") != -1){
                     compteur++;
-                    System.out.print(String.valueOf(compteur)+" -> "+ tram);
+                    //System.out.print(compteur + " -> "+ tram);
+                    for (int i = 0; i < tram.length(); i++) {
+                        if (tram.charAt(i) == '&') {
+                            list.add(i);
+                        } else if (tram.charAt(i) == '#') {
+                            list.add(i);
+                        } else if (tram.charAt(i) == '@') {
+                            list.add(i);
+                        } else if (tram.charAt(i) == '^') {
+                            list.add(i);
+                        }
+                    }
+                    if(list.size() == 8){
 
+                        battery_Voltage = Float.parseFloat(tram.substring(list.get(0)+1,list.get(1)));
+                        condensator_Voltage = Float.parseFloat(tram.substring(list.get(2)+1,list.get(3)));
+                        Intensite_1 = Float.parseFloat(tram.substring(list.get(4)+1,list.get(5)));
+                        Intensite_2 = Float.parseFloat(tram.substring(list.get(6)+1,list.get(7)));
+                        System.out.println("Batterie: "+battery_Voltage);
+                        System.out.println("Condo: " + condensator_Voltage);
+                        System.out.println("Ampere1: " + Intensite_1);
+                        System.out.println("Ampere2: " + Intensite_2);
+                        list.clear();
+                    }
                     Platform.runLater(() -> {
                         if (series.getData().size() > WINDOW_SIZE)
                             series.getData().remove(0);
                         series.getData().add(new XYChart.Data<>(String.valueOf(compteur), rand.nextInt(100)));
-                        test_label.setText(String.valueOf(rand.nextInt(100)));
+                       //series.getData().add(new XYChart.Data<>(String.valueOf(compteur), rand.nextInt(100)));
+
+                        //test_label.setText("yo");
                     });
 
                     tram.setLength(0);

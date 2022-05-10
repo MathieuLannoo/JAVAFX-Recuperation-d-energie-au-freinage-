@@ -28,7 +28,7 @@
              <NumberAxis fx:id="y" autoRanging="false" label="Ampère" side="LEFT" />
            </yAxis>
          </LineChart>
-         <Label fx:id="test_label" prefHeight="31.0" prefWidth="101.0" text="Test" />
+         <Label fx:id="test_label" prefHeight="18.0" prefWidth="506.0" text="Test" />
          <AnchorPane prefHeight="306.0" prefWidth="786.0">
             <ScrollBar fx:id="scrollbar_turn" layoutX="505.0" layoutY="110.0" onMouseReleased="#mouse_released" prefHeight="84.0" prefWidth="260.0" value="50.0" />
             <ScrollBar fx:id="scrollbar_forward" layoutX="147.0" layoutY="7.0" onMouseReleased="#mouse_released" orientation="VERTICAL" prefHeight="282.0" prefWidth="96.0" value="50.0" />

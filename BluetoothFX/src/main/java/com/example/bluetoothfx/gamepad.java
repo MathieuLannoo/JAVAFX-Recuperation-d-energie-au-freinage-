@@ -108,7 +108,7 @@ public class gamepad {
             }
             direction_gamepad = xAxisPercentage;
             try {
-                Thread.sleep(5);
+                Thread.sleep(1);
             } catch (InterruptedException ex) {
                 //Logger.getLogger(JoystickTest.class.getName()).log(Level.SEVERE, null, ex);
             }
