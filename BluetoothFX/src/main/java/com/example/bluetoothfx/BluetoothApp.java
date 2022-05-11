@@ -15,7 +15,11 @@ public class BluetoothApp extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 1600, 900);
         stage.setTitle("Bluetooth Car");
         stage.setScene(scene);
+        stage.setMaximized(true);
+        stage.setFullScreen(true);
         stage.show();
+
+
     }
 
     public static void main(String[] args) {

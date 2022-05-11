@@ -3,9 +3,12 @@ package com.example.bluetoothfx;
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
@@ -20,10 +23,11 @@ import java.util.ArrayList;
 
 public class HelloController {
 
+
     XYChart.Series<String, Number> Conso_Batterie1 = new XYChart.Series<>();
     XYChart.Series<String, Number> Conso_Batterie2 = new XYChart.Series<>();
     
-    gamepad Xbox_gamepad = new gamepad();
+    gamepad Xbox_gamepad;
     SerialPort selected_value;
     boolean new_tram_reception = false;
     bluetooth connection = new bluetooth();
@@ -38,6 +42,10 @@ public class HelloController {
     long old_tick;
     boolean acc_dir = false;
 
+    @FXML
+    public ImageView pedale_png;
+    @FXML
+    public ImageView volant_png;
     @FXML
     private Gauge speed;
     @FXML
@@ -78,8 +86,6 @@ public class HelloController {
                 Platform.runLater(() -> {
                     connection_status_gauge.setValue(100);
                 });
-
-            ConnectionPortTask.stop();
     }};
 
     Thread start_gamepad = new Thread() {
@@ -93,7 +99,7 @@ public class HelloController {
                         scrollbar_forward.setValue(Xbox_gamepad.acceleration_gamepad);
                         scrollbar_turn.setValue(Xbox_gamepad.direction_gamepad);
 
-                        if (System.currentTimeMillis() > old_tick + 100){
+                        if (System.currentTimeMillis() > old_tick + 50){
                             if (acc_dir){
                                 String cmd = "a|"+(100-Xbox_gamepad.acceleration_gamepad) + "|";
                                 //System.out.println(cmd);
@@ -136,8 +142,14 @@ public class HelloController {
                 System.out.println("Pas de manette connectée!");
         }
     };
+
+    public void ConnectGamepad() {
+        Xbox_gamepad = new gamepad();
+        Xbox_gamepad.searchForControllers();
+        if(Xbox_gamepad.ConnectedGamepad != null)
+            start_gamepad.start();
+    }
     public void initialize() {
-        start_gamepad.start();
         battery_level.setAnimated(false);
         acceleration_gauge.setAnimated(false);
         direction_gauge.setAnimated(false);
@@ -232,8 +244,8 @@ public class HelloController {
                         condensator_Voltage = Float.parseFloat(tram.substring(list.get(2)+1,list.get(3)));
                         Intensite_1 = Float.parseFloat(tram.substring(list.get(4)+1,list.get(5)));
                         Intensite_2 = Float.parseFloat(tram.substring(list.get(6)+1,list.get(7)));
-                        /*System.out.println("Batterie: "+battery_Voltage);
-                        System.out.println("Condo: " + condensator_Voltage);
+                        //System.out.println("Batterie: "+battery_Voltage);
+                        /*System.out.println("Condo: " + condensator_Voltage);
                         System.out.println("Ampere1: " + Intensite_1);
                         System.out.println("Ampere2: " + Intensite_2);*/
                         list.clear();
@@ -245,7 +257,7 @@ public class HelloController {
                             Conso_Batterie2.getData().remove(0);
 
                         if (battery_Voltage > 1){
-                            battery_level.setValue((battery_Voltage - 7.9) * (100) / (9.25 - 7.9));
+                            battery_level.setValue((battery_Voltage - 7) * (100) / (9.25 - 7));
                         }
                         else{
                             battery_level.setValue(0);
@@ -282,4 +294,6 @@ public class HelloController {
         scrollbar_forward.setValue(50);
         scrollbar_turn.setValue(50);
     }
+
+
 }

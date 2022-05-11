@@ -5,18 +5,20 @@ import net.java.games.input.ControllerEnvironment;
 import java.util.Objects;
 
 public class gamepad {
-    Controller ConnectedGamepad;
+    public Controller ConnectedGamepad;
     int direction_gamepad;
     int acceleration_gamepad;
+    Controller[] controllers;
+
 
 
     public gamepad() {
-        searchForControllers();
+        //searchForControllers();
 
     }
 
-    private void searchForControllers() {
-        Controller[] controllers = ControllerEnvironment.getDefaultEnvironment().getControllers();
+    public void searchForControllers() {
+        controllers= ControllerEnvironment.getDefaultEnvironment().getControllers();
 
         for(int i = 0; i < controllers.length; i++){
             Controller controller = controllers[i];

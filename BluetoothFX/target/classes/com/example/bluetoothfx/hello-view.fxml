@@ -8,28 +8,40 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ScrollBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
+<?import javafx.scene.shape.Line?>
 
-<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bluetoothfx.HelloController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="838.0" prefWidth="1550.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bluetoothfx.HelloController">
    <center>
-      <VBox alignment="CENTER" prefHeight="600.0" prefWidth="825.0" spacing="20.0">
+      <VBox alignment="CENTER" prefHeight="568.0" prefWidth="1634.0" spacing="20.0">
           <padding>
               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
           </padding>
-         <AnchorPane prefHeight="295.0" prefWidth="1293.0">
+         <AnchorPane prefHeight="500.0" prefWidth="1550.0">
             <ScrollBar fx:id="scrollbar_turn" layoutX="14.0" layoutY="384.0" onMouseReleased="#mouse_released" opacity="0.0" prefHeight="86.0" prefWidth="333.0" value="50.0" />
             <ScrollBar fx:id="scrollbar_forward" layoutX="1176.0" layoutY="188.0" onMouseReleased="#mouse_released" opacity="0.0" orientation="VERTICAL" prefHeight="282.0" prefWidth="96.0" value="50.0" />
-            <AnchorPane layoutX="1036.0" layoutY="355.0" prefHeight="102.0" prefWidth="161.0">
+            <AnchorPane layoutX="1263.0" layoutY="360.0" prefHeight="102.0" prefWidth="161.0">
                <children>
-                  <Gauge fx:id="direction_gauge" layoutX="118.0" layoutY="8.0" prefHeight="94.0" prefWidth="106.0" skinType="SIMPLE_SECTION" valueVisible="false" />
-                  <Gauge fx:id="acceleration_gauge" layoutX="14.0" layoutY="8.0" minValue="50.0" prefHeight="94.0" prefWidth="104.0" skinType="SIMPLE_SECTION" valueVisible="false" />
+                  <Gauge fx:id="direction_gauge" layoutX="118.0" layoutY="8.0" prefHeight="100.0" prefWidth="100.0" skinType="SIMPLE_SECTION" valueVisible="false" />
+                  <Gauge fx:id="acceleration_gauge" layoutX="14.0" layoutY="8.0" minValue="50.0" prefHeight="100.0" prefWidth="100.0" skinType="SIMPLE_SECTION" valueVisible="false" />
+                  <ImageView fx:id="pedale_png" fitHeight="50.0" fitWidth="50.0" layoutX="39.0" layoutY="33.0">
+                     <image>
+                        <Image url="@photo/pedale.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="volant_png" fitHeight="50.0" fitWidth="50.0" layoutX="143.0" layoutY="33.0">
+                     <image>
+                        <Image url="@photo/volant.png" />
+                     </image>
+                  </ImageView>
                </children>
             </AnchorPane>
-            <Gauge fx:id="battery_level" layoutX="1093.0" prefHeight="122.0" prefWidth="200.0" skinType="BATTERY" tickLabelsVisible="false">
+            <Gauge fx:id="battery_level" layoutX="1251.0" prefHeight="164.0" prefWidth="267.0" skinType="BATTERY" tickLabelsVisible="false">
                <ledColor>
                   <Color red="0.21108771860599518" green="0.12460038810968399" blue="0.9894737005233765" />
                </ledColor>
@@ -45,37 +57,48 @@
             </Gauge>
             <AnchorPane layoutX="14.0" layoutY="325.0" prefHeight="114.0" prefWidth="303.0">
                <children>
-                  <Gauge fx:id="conso_batterie1" knobVisible="false" layoutX="7.0" layoutY="23.0" majorTickMarksVisible="false" maxValue="20.0" prefHeight="122.0" prefWidth="138.0" skinType="DASHBOARD" unit="Watt" />
-                  <Gauge fx:id="conso_batterie2" layoutX="165.0" layoutY="23.0" maxValue="20.0" prefHeight="122.0" prefWidth="138.0" skinType="DASHBOARD" unit="Watt" />
+                  <Gauge fx:id="conso_batterie1" knobVisible="false" layoutX="7.0" layoutY="23.0" majorTickMarksVisible="false" maxValue="25.0" prefHeight="122.0" prefWidth="138.0" skinType="DASHBOARD" unit="Watt" />
+                  <Gauge fx:id="conso_batterie2" layoutX="165.0" layoutY="23.0" maxValue="25.0" prefHeight="122.0" prefWidth="138.0" skinType="DASHBOARD" unit="Watt" />
+                  <Line endX="182.20001220703125" layoutX="115.0" layoutY="130.0" opacity="0.75" startX="-100.0" stroke="#456acf" strokeWidth="2.0" />
                </children>
             </AnchorPane>
-            <Gauge fx:id="conso_global" layoutX="250.0" maxValue="50.0" oldValueVisible="true" prefHeight="361.0" prefWidth="414.0" skinType="SPACE_X" unit="Watt" />
-            <Gauge fx:id="speed" layoutX="701.0" layoutY="51.0" prefHeight="311.0" prefWidth="341.0" skinType="BAR" unit="Km/H" />
+            <Gauge fx:id="conso_global" layoutX="320.0" layoutY="28.0" maxValue="50.0" oldValueVisible="true" prefHeight="361.0" prefWidth="414.0" skinType="SPACE_X" unit="Watt" />
+            <Gauge fx:id="speed" layoutX="761.0" layoutY="79.0" prefHeight="311.0" prefWidth="341.0" skinType="BAR" unit="Km/H" />
+         </AnchorPane>
+         <AnchorPane prefHeight="200.0" prefWidth="200.0">
+            <children>
+               <LineChart fx:id="test_chart" layoutX="14.0" layoutY="24.0" prefHeight="150.0" prefWidth="1455.0" title="Consommation">
+                 <xAxis>
+                   <CategoryAxis side="BOTTOM" tickLabelsVisible="false" tickMarkVisible="false" fx:id="x" />
+                 </xAxis>
+                 <yAxis>
+                   <NumberAxis fx:id="y" autoRanging="false" label="Puissance en W" side="LEFT" upperBound="40.0" />
+                 </yAxis>
+               </LineChart>
+            </children>
          </AnchorPane>
       </VBox>
    </center>
-   <bottom>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-         <children>
-            <HBox prefHeight="94.0" prefWidth="974.0">
-               <children>
-                  <LineChart fx:id="test_chart" prefHeight="74.0" prefWidth="1036.0" title="Consommation">
-                    <xAxis>
-                      <CategoryAxis side="BOTTOM" tickLabelsVisible="false" tickMarkVisible="false" fx:id="x" />
-                    </xAxis>
-                    <yAxis>
-                      <NumberAxis fx:id="y" autoRanging="false" label="Puissance en W" side="LEFT" upperBound="40.0" />
-                    </yAxis>
-                  </LineChart>
-               </children>
-            </HBox>
-         </children></VBox>
-   </bottom>
    <top>
       <AnchorPane prefHeight="70.0" prefWidth="1326.0" BorderPane.alignment="CENTER">
-         <ChoiceBox fx:id="bluetooth_portlist" layoutX="902.0" layoutY="22.0" prefWidth="150.0" />
-         <Button layoutX="1059.0" layoutY="22.0" minHeight="-Infinity" minWidth="30.0" mnemonicParsing="false" onAction="#ConnectButton" prefHeight="25.0" text="Connect" />
-         <Gauge fx:id="connection_status_gauge" averagingPeriod="8" customTickLabelFontSize="11.0" layoutX="1140.0" layoutY="2.0" prefHeight="50.0" prefWidth="161.0" skinType="CHARGE" />
+         <ChoiceBox fx:id="bluetooth_portlist" layoutX="1012.0" layoutY="17.0" prefHeight="36.0" prefWidth="150.0" />
+         <Button layoutX="1180.0" layoutY="17.0" minHeight="-Infinity" minWidth="30.0" mnemonicParsing="false" onAction="#ConnectButton" prefHeight="35.0" prefWidth="148.0" text="Connect Bluetooth">
+            <graphic>
+               <ImageView fitHeight="25.0" fitWidth="25.0">
+                  <image>
+                     <Image url="@photo/bluetooth.png" />
+                  </image>
+               </ImageView>
+            </graphic></Button>
+         <Gauge fx:id="connection_status_gauge" averagingPeriod="8" customTickLabelFontSize="11.0" layoutX="1350.0" layoutY="9.0" prefHeight="50.0" prefWidth="161.0" skinType="CHARGE" />
+         <Button layoutX="30.0" layoutY="18.0" mnemonicParsing="false" onAction="#ConnectGamepad" text="Connect Gamepad">
+            <graphic>
+               <ImageView fitHeight="25.0" fitWidth="25.0">
+                  <image>
+                     <Image url="@photo/gamepad.png" />
+                  </image>
+               </ImageView>
+            </graphic></Button>
       </AnchorPane>
    </top>
 </BorderPane>
