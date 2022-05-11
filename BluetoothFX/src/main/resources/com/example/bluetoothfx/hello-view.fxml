@@ -21,8 +21,8 @@
               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
           </padding>
          <AnchorPane prefHeight="484.0" prefWidth="1036.0">
-            <ScrollBar fx:id="scrollbar_turn" layoutX="505.0" layoutY="110.0" onMouseReleased="#mouse_released" prefHeight="84.0" prefWidth="260.0" value="50.0" />
-            <ScrollBar fx:id="scrollbar_forward" layoutX="147.0" layoutY="7.0" onMouseReleased="#mouse_released" orientation="VERTICAL" prefHeight="282.0" prefWidth="96.0" value="50.0" />
+            <ScrollBar fx:id="scrollbar_turn" layoutX="505.0" layoutY="110.0" onMouseReleased="#mouse_released" opacity="0.0" prefHeight="84.0" prefWidth="260.0" value="50.0" />
+            <ScrollBar fx:id="scrollbar_forward" layoutX="147.0" layoutY="7.0" onMouseReleased="#mouse_released" opacity="0.0" orientation="VERTICAL" prefHeight="282.0" prefWidth="96.0" value="50.0" />
             <AnchorPane layoutX="253.0" layoutY="158.0" prefHeight="110.0" prefWidth="91.0">
                <children>
                   <Gauge fx:id="direction_gauge" layoutX="20.0" layoutY="7.0" prefHeight="94.0" prefWidth="106.0" skinType="SIMPLE_SECTION" valueVisible="false" />

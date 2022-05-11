@@ -59,29 +59,27 @@ public class HelloController {
     @FXML
     private ChoiceBox<SerialPort> bluetooth_portlist;
 
-    @FXML
-    private Gauge gauge_test;
 
     Thread ConnectionPortTask = new Thread() {
         public void run() {
             connection.setPort(selected_value);
             if (connection.Connection_State == 1)
                 connection_status_gauge.setValue(100);
-            acceleration_gauge.setAnimated(false);
-            direction_gauge.setAnimated(false);
             ConnectionPortTask.stop();
     }};
 
     Thread start_gamepad = new Thread() {
         public void run() {
+
             if(Xbox_gamepad.ConnectedGamepad != null){
                 while(true){
                     Xbox_gamepad.RefreshControllerData();
-                    scrollbar_forward.setValue(Xbox_gamepad.acceleration_gamepad);
-                    scrollbar_turn.setValue(Xbox_gamepad.direction_gamepad);
-
-
-
+                    Platform.runLater(() -> {
+                        scrollbar_forward.setValue(Xbox_gamepad.acceleration_gamepad);
+                        scrollbar_turn.setValue(Xbox_gamepad.direction_gamepad);
+                        acceleration_gauge.setValue(100 - Xbox_gamepad.acceleration_gamepad);
+                        direction_gauge.setValue(Xbox_gamepad.direction_gamepad);
+                    });
                     if( !Xbox_gamepad.ConnectedGamepad.poll() ){
                         scrollbar_forward.setValue(50);
                         System.out.println("manette deconnectée");
@@ -96,12 +94,13 @@ public class HelloController {
             else
                 System.out.println("Pas de manette connectée!");
         }
-
     };
     public void initialize() {
         start_gamepad.start();
-        battery_level.setAnimated(true);
-        connection_status_gauge.setAnimated(true);
+        battery_level.setAnimated(false);
+        acceleration_gauge.setAnimated(false);
+        direction_gauge.setAnimated(false);
+        connection_status_gauge.setAnimated(false);
         battery_level.setBarColor(Color.GREEN);
         bluetooth_portlist.getItems().addAll(connection.ports);
 
@@ -110,13 +109,11 @@ public class HelloController {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
                 int accelerate = 100 - t1.intValue();
-                if (accelerate != old_value){
+                if (accelerate <= old_value-3 || accelerate >= old_value+3){
                     String cmd = "a|"+accelerate + "|";
-                    Platform.runLater(() -> {
-                        acceleration_gauge.setValue(accelerate);
-                    });
                     System.out.println(cmd);
-                    connection.send_command(cmd);
+                    if(connection.Connection_State == 1)
+                        connection.send_command(cmd);
                     old_value = accelerate;
                 }
             }
@@ -130,7 +127,8 @@ public class HelloController {
                 if (turn<= old_value-3 || turn >=old_value+3){
                     String cmd = "t|" + turn + "|";
                     System.out.println(cmd);
-                    connection.send_command(cmd);
+                    if(connection.Connection_State == 1)
+                        connection.send_command(cmd);
                     old_value = turn;
                 }
             }
