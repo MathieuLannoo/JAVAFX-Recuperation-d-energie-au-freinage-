@@ -16,6 +16,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import eu.hansolo.medusa.Gauge;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
@@ -24,8 +25,10 @@ import java.util.ArrayList;
 public class HelloController {
 
 
-    XYChart.Series<String, Number> Conso_Batterie1 = new XYChart.Series<>();
-    XYChart.Series<String, Number> Conso_Batterie2 = new XYChart.Series<>();
+
+    XYChart.Series<String, Number> Serie_Conso_Totale = new XYChart.Series<>();
+    XYChart.Series<String, Number> Serie_Conso_Batterie1 = new XYChart.Series<>();
+    XYChart.Series<String, Number> Serie_Conso_Batterie2 = new XYChart.Series<>();
     
     gamepad Xbox_gamepad;
     SerialPort selected_value;
@@ -42,6 +45,16 @@ public class HelloController {
     long old_tick;
     boolean acc_dir = false;
 
+    @FXML
+    public AnchorPane Linegraph_BOX;
+    @FXML
+    public CheckBox checkbox_conso_general;
+    @FXML
+    public CheckBox checkbox_conso2;
+    @FXML
+    public CheckBox checkbox_conso1;
+    @FXML
+    public ToggleButton Linegraph_button;
     @FXML
     public ImageView pedale_png;
     @FXML
@@ -142,7 +155,6 @@ public class HelloController {
                 System.out.println("Pas de manette connectée!");
         }
     };
-
     public void ConnectGamepad() {
         Xbox_gamepad = new gamepad();
         Xbox_gamepad.searchForControllers();
@@ -150,6 +162,7 @@ public class HelloController {
             start_gamepad.start();
     }
     public void initialize() {
+        Linegraph_BOX.setVisible(false);
         battery_level.setAnimated(false);
         acceleration_gauge.setAnimated(false);
         direction_gauge.setAnimated(false);
@@ -198,9 +211,9 @@ public class HelloController {
             }
         });*/
         //graph settings
-        Conso_Batterie1.setName("conso real time");
-        test_chart.getData().add(Conso_Batterie1);
-        test_chart.getData().add(Conso_Batterie2);
+        Serie_Conso_Batterie1.setName("Puissance Moteur 1 en Watt");
+        Serie_Conso_Batterie2.setName("Puissance Moteur 2 en Watt");
+        Serie_Conso_Totale.setName("Puissance Totale en Watt");
         test_chart.setAnimated(false);
         test_chart.setCreateSymbols(false); //cache les points
         test_chart.setHorizontalGridLinesVisible(false);
@@ -209,6 +222,7 @@ public class HelloController {
     }
 
     public void ConnectButton() {
+        long initial_time = System.currentTimeMillis();
         selected_value =  bluetooth_portlist.getValue();
         ConnectionPortTask.start();
         selected_value.addDataListener(new SerialPortDataListener() {
@@ -224,7 +238,7 @@ public class HelloController {
                     if(b != 0)
                         tram.append((char)b);
                 }
-                if (tram.indexOf("\n") != -1){
+                if (tram.indexOf("\n") != -1 & System.currentTimeMillis() > initial_time+1000){
                     compteur++;
                     //System.out.print(compteur + " -> "+ tram);
                     for (int i = 0; i < tram.length(); i++) {
@@ -238,23 +252,25 @@ public class HelloController {
                             list.add(i);
                         }
                     }
-                    if(list.size() == 8){
+                    if(list.size() == 8 & System.currentTimeMillis() > initial_time+1000){
 
                         battery_Voltage = Float.parseFloat(tram.substring(list.get(0)+1,list.get(1)));
                         condensator_Voltage = Float.parseFloat(tram.substring(list.get(2)+1,list.get(3)));
                         Intensite_1 = Float.parseFloat(tram.substring(list.get(4)+1,list.get(5)));
                         Intensite_2 = Float.parseFloat(tram.substring(list.get(6)+1,list.get(7)));
-                        //System.out.println("Batterie: "+battery_Voltage);
-                        /*System.out.println("Condo: " + condensator_Voltage);
+                        /*System.out.println("Batterie: "+battery_Voltage);
+                        System.out.println("Condo: " + condensator_Voltage);
                         System.out.println("Ampere1: " + Intensite_1);
                         System.out.println("Ampere2: " + Intensite_2);*/
                         list.clear();
-                    }
+
                     Platform.runLater(() -> {
-                        if (Conso_Batterie1.getData().size() > WINDOW_SIZE) //Effet de translation au niveau du graph
-                            Conso_Batterie1.getData().remove(0);
-                        if(Conso_Batterie2.getData().size() > WINDOW_SIZE) //Effet de translation au niveau du graph
-                            Conso_Batterie2.getData().remove(0);
+                        if (Serie_Conso_Batterie1.getData().size() > WINDOW_SIZE) //Effet de translation au niveau du graph
+                            Serie_Conso_Batterie1.getData().remove(0);
+                        if(Serie_Conso_Batterie2.getData().size() > WINDOW_SIZE) //Effet de translation au niveau du graph
+                            Serie_Conso_Batterie2.getData().remove(0);
+                        if(Serie_Conso_Totale.getData().size() > WINDOW_SIZE)
+                            Serie_Conso_Totale.getData().remove(0);
 
                         if (battery_Voltage > 1){
                             battery_level.setValue((battery_Voltage - 7) * (100) / (9.25 - 7));
@@ -263,8 +279,9 @@ public class HelloController {
                             battery_level.setValue(0);
                         }
 
-                        Conso_Batterie1.getData().add(new XYChart.Data<>(String.valueOf(compteur), Intensite_1*-1));
-                        Conso_Batterie2.getData().add(new XYChart.Data<>(String.valueOf(compteur), Intensite_2*-1));
+                        Serie_Conso_Batterie1.getData().add(new XYChart.Data<>(String.valueOf(compteur), Intensite_1*-1));
+                        Serie_Conso_Batterie2.getData().add(new XYChart.Data<>(String.valueOf(compteur), Intensite_2*-1));
+                        Serie_Conso_Totale.getData().add(new XYChart.Data<>(String.valueOf(compteur), Intensite_2*-1+Intensite_1*-1));
                         conso_batterie1.setValue(Intensite_1*-1);
                         conso_batterie2.setValue(Intensite_2*-1);
                         if(Intensite_1*-1 + Intensite_2*-1 <= 50){
@@ -278,6 +295,7 @@ public class HelloController {
                             conso_global.setValue(50);
                         }
                     });
+                    }
 
                     tram.setLength(0);
                 }
@@ -295,5 +313,36 @@ public class HelloController {
         scrollbar_turn.setValue(50);
     }
 
+    public void toggle_button(ActionEvent actionEvent) {
+        if(actionEvent.getSource() == Linegraph_button){
+            if(Linegraph_button.isSelected())
+                Linegraph_BOX.setVisible(true);
+            else
+                Linegraph_BOX.setVisible(false);
+        }
+
+    }
+    public void graph_checklist(ActionEvent actionEvent){
+        if(actionEvent.getSource() == checkbox_conso1){
+            if(checkbox_conso1.isSelected())
+                test_chart.getData().add(Serie_Conso_Batterie1);
+            else
+                test_chart.getData().removeAll(Serie_Conso_Batterie1);
+            }
+        else if(actionEvent.getSource() == checkbox_conso2){
+            if(checkbox_conso2.isSelected())
+                test_chart.getData().add(Serie_Conso_Batterie2);
+            else
+                test_chart.getData().removeAll(Serie_Conso_Batterie2);
+
+            }
+        else if(actionEvent.getSource() == checkbox_conso_general){
+            if(checkbox_conso_general.isSelected())
+                test_chart.getData().add(Serie_Conso_Totale);
+            else
+                test_chart.getData().removeAll(Serie_Conso_Totale);
+            }
+
+    }
 
 }
