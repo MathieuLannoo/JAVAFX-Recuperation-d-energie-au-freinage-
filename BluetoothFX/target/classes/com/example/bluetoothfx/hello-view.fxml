@@ -20,34 +20,40 @@
           <padding>
               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
           </padding>
-         <AnchorPane prefHeight="484.0" prefWidth="1036.0">
-            <ScrollBar fx:id="scrollbar_turn" layoutX="505.0" layoutY="110.0" onMouseReleased="#mouse_released" opacity="0.0" prefHeight="84.0" prefWidth="260.0" value="50.0" />
-            <ScrollBar fx:id="scrollbar_forward" layoutX="147.0" layoutY="7.0" onMouseReleased="#mouse_released" opacity="0.0" orientation="VERTICAL" prefHeight="282.0" prefWidth="96.0" value="50.0" />
-            <AnchorPane layoutX="253.0" layoutY="158.0" prefHeight="110.0" prefWidth="91.0">
+         <AnchorPane prefHeight="295.0" prefWidth="1293.0">
+            <ScrollBar fx:id="scrollbar_turn" layoutX="14.0" layoutY="384.0" onMouseReleased="#mouse_released" opacity="0.0" prefHeight="86.0" prefWidth="333.0" value="50.0" />
+            <ScrollBar fx:id="scrollbar_forward" layoutX="1176.0" layoutY="188.0" onMouseReleased="#mouse_released" opacity="0.0" orientation="VERTICAL" prefHeight="282.0" prefWidth="96.0" value="50.0" />
+            <AnchorPane layoutX="1036.0" layoutY="355.0" prefHeight="102.0" prefWidth="161.0">
                <children>
-                  <Gauge fx:id="direction_gauge" layoutX="20.0" layoutY="7.0" prefHeight="94.0" prefWidth="106.0" skinType="SIMPLE_SECTION" valueVisible="false" />
-                  <Gauge fx:id="acceleration_gauge" layoutX="135.0" layoutY="7.0" minValue="50.0" prefHeight="94.0" prefWidth="104.0" skinType="SIMPLE_SECTION" valueVisible="false" />
+                  <Gauge fx:id="direction_gauge" layoutX="118.0" layoutY="8.0" prefHeight="94.0" prefWidth="106.0" skinType="SIMPLE_SECTION" valueVisible="false" />
+                  <Gauge fx:id="acceleration_gauge" layoutX="14.0" layoutY="8.0" minValue="50.0" prefHeight="94.0" prefWidth="104.0" skinType="SIMPLE_SECTION" valueVisible="false" />
                </children>
             </AnchorPane>
+            <Gauge fx:id="battery_level" layoutX="1093.0" prefHeight="122.0" prefWidth="200.0" skinType="BATTERY" tickLabelsVisible="false">
+               <ledColor>
+                  <Color red="0.21108771860599518" green="0.12460038810968399" blue="0.9894737005233765" />
+               </ledColor>
+               <needleColor>
+                  <Color red="0.6421052813529968" green="0.6365562081336975" blue="0.6302144527435303" />
+               </needleColor>
+               <needleBorderColor>
+                  <Color red="0.33547499775886536" green="0.28349998593330383" blue="0.6299999952316284" opacity="0.0" />
+               </needleBorderColor>
+               <thresholdColor>
+                  <Color red="0.14459389448165894" green="0.08405458182096481" blue="0.8105263113975525" />
+               </thresholdColor>
+            </Gauge>
+            <AnchorPane layoutX="14.0" layoutY="325.0" prefHeight="114.0" prefWidth="303.0">
+               <children>
+                  <Gauge fx:id="conso_batterie1" knobVisible="false" layoutX="7.0" layoutY="23.0" majorTickMarksVisible="false" maxValue="20.0" prefHeight="122.0" prefWidth="138.0" skinType="DASHBOARD" unit="Watt" />
+                  <Gauge fx:id="conso_batterie2" layoutX="165.0" layoutY="23.0" maxValue="20.0" prefHeight="122.0" prefWidth="138.0" skinType="DASHBOARD" unit="Watt" />
+               </children>
+            </AnchorPane>
+            <Gauge fx:id="conso_global" layoutX="250.0" maxValue="50.0" oldValueVisible="true" prefHeight="361.0" prefWidth="414.0" skinType="SPACE_X" unit="Watt" />
+            <Gauge fx:id="speed" layoutX="701.0" layoutY="51.0" prefHeight="311.0" prefWidth="341.0" skinType="BAR" unit="Km/H" />
          </AnchorPane>
       </VBox>
    </center>
-   <right>
-      <Gauge fx:id="battery_level" skinType="BATTERY" tickLabelsVisible="false" BorderPane.alignment="CENTER">
-         <ledColor>
-            <Color red="0.21108771860599518" green="0.12460038810968399" blue="0.9894737005233765" />
-         </ledColor>
-         <needleColor>
-            <Color red="0.6421052813529968" green="0.6365562081336975" blue="0.6302144527435303" />
-         </needleColor>
-         <needleBorderColor>
-            <Color red="0.33547499775886536" green="0.28349998593330383" blue="0.6299999952316284" opacity="0.0" />
-         </needleBorderColor>
-         <thresholdColor>
-            <Color red="0.14459389448165894" green="0.08405458182096481" blue="0.8105263113975525" />
-         </thresholdColor>
-      </Gauge>
-   </right>
    <bottom>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
@@ -67,9 +73,9 @@
    </bottom>
    <top>
       <AnchorPane prefHeight="70.0" prefWidth="1326.0" BorderPane.alignment="CENTER">
-         <ChoiceBox fx:id="bluetooth_portlist" layoutX="914.0" layoutY="20.0" prefWidth="150.0" />
-         <Button layoutX="1070.0" layoutY="20.0" minHeight="-Infinity" minWidth="30.0" mnemonicParsing="false" onAction="#ConnectButton" prefHeight="25.0" text="Connect" />
-         <Gauge fx:id="connection_status_gauge" customTickLabelFontSize="11.0" layoutX="1148.0" layoutY="1.0" prefHeight="50.0" prefWidth="161.0" skinType="CHARGE" />
+         <ChoiceBox fx:id="bluetooth_portlist" layoutX="902.0" layoutY="22.0" prefWidth="150.0" />
+         <Button layoutX="1059.0" layoutY="22.0" minHeight="-Infinity" minWidth="30.0" mnemonicParsing="false" onAction="#ConnectButton" prefHeight="25.0" text="Connect" />
+         <Gauge fx:id="connection_status_gauge" averagingPeriod="8" customTickLabelFontSize="11.0" layoutX="1140.0" layoutY="2.0" prefHeight="50.0" prefWidth="161.0" skinType="CHARGE" />
       </AnchorPane>
    </top>
 </BorderPane>

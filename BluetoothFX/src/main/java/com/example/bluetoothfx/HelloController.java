@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 
 
 public class HelloController {
+
     XYChart.Series<String, Number> Conso_Batterie1 = new XYChart.Series<>();
     XYChart.Series<String, Number> Conso_Batterie2 = new XYChart.Series<>();
     
@@ -31,12 +32,23 @@ public class HelloController {
     bluetooth connection = new bluetooth();
     StringBuilder tram = new StringBuilder();
     ArrayList<Integer> list = new ArrayList<>();
-
+    Color Blue_gauge = Color.valueOf("#456ACF");
+    Color Red_gauge = Color.RED;
     float battery_Voltage;
     float condensator_Voltage;
     float Intensite_1;
     float Intensite_2;
 
+    @FXML
+    private Gauge speed;
+    @FXML
+    private Gauge conso_global;
+    @FXML
+    public Gauge conso_batterie1;
+    @FXML
+    public Gauge conso_batterie2;
+    @FXML
+    public Gauge test;
     @FXML
     private LineChart<String, Number> test_chart;
     @FXML
@@ -64,7 +76,10 @@ public class HelloController {
         public void run() {
             connection.setPort(selected_value);
             if (connection.Connection_State == 1)
-                connection_status_gauge.setValue(100);
+                Platform.runLater(() -> {
+                    connection_status_gauge.setValue(100);
+                });
+
             ConnectionPortTask.stop();
     }};
 
@@ -77,7 +92,13 @@ public class HelloController {
                     Platform.runLater(() -> {
                         scrollbar_forward.setValue(Xbox_gamepad.acceleration_gamepad);
                         scrollbar_turn.setValue(Xbox_gamepad.direction_gamepad);
+
                         acceleration_gauge.setValue(100 - Xbox_gamepad.acceleration_gamepad);
+                        if(100-Xbox_gamepad.acceleration_gamepad > 95)
+                            acceleration_gauge.setBarColor(Color.RED);
+                        else
+                            acceleration_gauge.setBarColor(Blue_gauge);
+
                         direction_gauge.setValue(Xbox_gamepad.direction_gamepad);
                     });
                     if( !Xbox_gamepad.ConnectedGamepad.poll() ){
@@ -100,9 +121,20 @@ public class HelloController {
         battery_level.setAnimated(false);
         acceleration_gauge.setAnimated(false);
         direction_gauge.setAnimated(false);
+        speed.setAnimated(false);
+        conso_global.setAnimated(false);
         connection_status_gauge.setAnimated(false);
         battery_level.setBarColor(Color.GREEN);
+        conso_batterie1.setBarColor(Blue_gauge);
+        conso_batterie2.setBarColor(Blue_gauge);
+        speed.setBarColor(Blue_gauge);
+        conso_global.setBarColor(Blue_gauge);
+        speed.setForegroundBaseColor(Color.BLACK);
+        conso_global.setForegroundBaseColor(Color.BLACK);
+
         bluetooth_portlist.getItems().addAll(connection.ports);
+        conso_batterie1.setAnimated(false);
+        conso_batterie2.setAnimated(false);
 
         scrollbar_forward.valueProperty().addListener(new ChangeListener<Number>() {
             int old_value = 100;
@@ -180,10 +212,10 @@ public class HelloController {
                         condensator_Voltage = Float.parseFloat(tram.substring(list.get(2)+1,list.get(3)));
                         Intensite_1 = Float.parseFloat(tram.substring(list.get(4)+1,list.get(5)));
                         Intensite_2 = Float.parseFloat(tram.substring(list.get(6)+1,list.get(7)));
-                        System.out.println("Batterie: "+battery_Voltage);
+                        /*System.out.println("Batterie: "+battery_Voltage);
                         System.out.println("Condo: " + condensator_Voltage);
                         System.out.println("Ampere1: " + Intensite_1);
-                        System.out.println("Ampere2: " + Intensite_2);
+                        System.out.println("Ampere2: " + Intensite_2);*/
                         list.clear();
                     }
                     Platform.runLater(() -> {
@@ -201,11 +233,18 @@ public class HelloController {
 
                         Conso_Batterie1.getData().add(new XYChart.Data<>(String.valueOf(compteur), Intensite_1*-1));
                         Conso_Batterie2.getData().add(new XYChart.Data<>(String.valueOf(compteur), Intensite_2*-1));
-                        //Conso_Batterie1.getData().add(new XYChart.Data<>(String.valueOf(compteur), rand.nextInt(100)));
-                        //Conso_Batterie2.getData().add(new XYChart.Data<>(String.valueOf(compteur), rand.nextInt(100)));
-
-
-                        //test_label.setText("yo");
+                        conso_batterie1.setValue(Intensite_1*-1);
+                        conso_batterie2.setValue(Intensite_2*-1);
+                        if(Intensite_1*-1 + Intensite_2*-1 <= 50){
+                            conso_global.setValue(Intensite_1*-1 + Intensite_2*-1);
+                            if(Intensite_1*-1 + Intensite_2*-1 < 34)
+                                conso_global.setBarColor(Blue_gauge);
+                            else {
+                                conso_global.setBarColor(Red_gauge);
+                            }}
+                        else{
+                            conso_global.setValue(50);
+                        }
                     });
 
                     tram.setLength(0);
