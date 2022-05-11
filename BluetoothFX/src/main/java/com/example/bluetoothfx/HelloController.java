@@ -16,9 +16,6 @@ import eu.hansolo.medusa.Gauge;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
-import java.util.Random;
-
-import java.text.SimpleDateFormat;
 
 
 public class HelloController {
@@ -38,6 +35,8 @@ public class HelloController {
     float condensator_Voltage;
     float Intensite_1;
     float Intensite_2;
+    long old_tick;
+    boolean acc_dir = false;
 
     @FXML
     private Gauge speed;
@@ -90,8 +89,29 @@ public class HelloController {
                 while(true){
                     Xbox_gamepad.RefreshControllerData();
                     Platform.runLater(() -> {
+
                         scrollbar_forward.setValue(Xbox_gamepad.acceleration_gamepad);
                         scrollbar_turn.setValue(Xbox_gamepad.direction_gamepad);
+
+                        if (System.currentTimeMillis() > old_tick + 100){
+                            if (acc_dir){
+                                String cmd = "a|"+(100-Xbox_gamepad.acceleration_gamepad) + "|";
+                                //System.out.println(cmd);
+                                if(connection.Connection_State == 1)
+                                    connection.send_command(cmd);
+
+                            }
+                            else if(acc_dir == false){
+
+                                String cmd = "t|" + Xbox_gamepad.direction_gamepad + "|";
+                                //System.out.println(cmd);
+                                if(connection.Connection_State == 1)
+                                    connection.send_command(cmd);
+                            }
+                            acc_dir = !acc_dir;
+                            //System.out.println(System.currentTimeMillis() - old_tick);
+                            old_tick = System.currentTimeMillis();
+                        }
 
                         acceleration_gauge.setValue(100 - Xbox_gamepad.acceleration_gamepad);
                         if(100-Xbox_gamepad.acceleration_gamepad > 95)
@@ -136,14 +156,14 @@ public class HelloController {
         conso_batterie1.setAnimated(false);
         conso_batterie2.setAnimated(false);
 
-        scrollbar_forward.valueProperty().addListener(new ChangeListener<Number>() {
+        /*scrollbar_forward.valueProperty().addListener(new ChangeListener<Number>() {
             int old_value = 100;
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
                 int accelerate = 100 - t1.intValue();
                 if (accelerate <= old_value-3 || accelerate >= old_value+3){
                     String cmd = "a|"+accelerate + "|";
-                    System.out.println(cmd);
+                    //System.out.println(cmd);
                     if(connection.Connection_State == 1)
                         connection.send_command(cmd);
                     old_value = accelerate;
@@ -158,13 +178,13 @@ public class HelloController {
                 int turn = t1.intValue();
                 if (turn<= old_value-3 || turn >=old_value+3){
                     String cmd = "t|" + turn + "|";
-                    System.out.println(cmd);
+                    //System.out.println(cmd);
                     if(connection.Connection_State == 1)
                         connection.send_command(cmd);
                     old_value = turn;
                 }
             }
-        });
+        });*/
         //graph settings
         Conso_Batterie1.setName("conso real time");
         test_chart.getData().add(Conso_Batterie1);
