@@ -42,6 +42,8 @@ public class HelloController {
     float condensator_Voltage;
     float Intensite_1;
     float Intensite_2;
+    float Speed;
+
     long old_tick;
     boolean acc_dir = false;
 
@@ -112,10 +114,15 @@ public class HelloController {
                         scrollbar_forward.setValue(Xbox_gamepad.acceleration_gamepad);
                         scrollbar_turn.setValue(Xbox_gamepad.direction_gamepad);
 
-                        if (System.currentTimeMillis() > old_tick + 50){
+                        /*if (System.currentTimeMillis() > old_tick + 50){
                             if (acc_dir){
-                                String cmd = "a|"+(100-Xbox_gamepad.acceleration_gamepad) + "|";
+                                String cmd = "a|" + Xbox_gamepad.acceleration_gamepad + "|";
+                                if(100-Xbox_gamepad.acceleration_gamepad <=9)
+                                    cmd = "a|0"+ Xbox_gamepad.acceleration_gamepad + "|";
+                                if(100-Xbox_gamepad.acceleration_gamepad == 100)
+                                    cmd = "a|99|";
                                 //System.out.println(cmd);
+
                                 if(connection.Connection_State == 1)
                                     connection.send_command(cmd);
 
@@ -124,13 +131,17 @@ public class HelloController {
 
                                 String cmd = "t|" + Xbox_gamepad.direction_gamepad + "|";
                                 //System.out.println(cmd);
+                                if(100-Xbox_gamepad.direction_gamepad <=9)
+                                    cmd = "t|0"+ Xbox_gamepad.direction_gamepad + "|";
+                                if(100-Xbox_gamepad.direction_gamepad == 100)
+                                    cmd = "t|99|";
                                 if(connection.Connection_State == 1)
                                     connection.send_command(cmd);
                             }
                             acc_dir = !acc_dir;
                             //System.out.println(System.currentTimeMillis() - old_tick);
                             old_tick = System.currentTimeMillis();
-                        }
+                        }*/
 
                         acceleration_gauge.setValue(100 - Xbox_gamepad.acceleration_gamepad);
                         if(100-Xbox_gamepad.acceleration_gamepad > 95)
@@ -165,9 +176,13 @@ public class HelloController {
         Linegraph_BOX.setVisible(false);
         battery_level.setAnimated(false);
         acceleration_gauge.setAnimated(false);
+        acceleration_gauge.setAnimationDuration(490);
         direction_gauge.setAnimated(false);
-        speed.setAnimated(false);
-        conso_global.setAnimated(false);
+        direction_gauge.setAnimationDuration(490);
+        speed.setAnimated(true);
+        speed.setAnimationDuration(490);
+        conso_global.setAnimated(true);
+        conso_global.setAnimationDuration(490);
         connection_status_gauge.setAnimated(false);
         battery_level.setBarColor(Color.GREEN);
         conso_batterie1.setBarColor(Blue_gauge);
@@ -178,16 +193,23 @@ public class HelloController {
         conso_global.setForegroundBaseColor(Color.BLACK);
 
         bluetooth_portlist.getItems().addAll(connection.ports);
-        conso_batterie1.setAnimated(false);
-        conso_batterie2.setAnimated(false);
-
-        /*scrollbar_forward.valueProperty().addListener(new ChangeListener<Number>() {
+        conso_batterie1.setAnimated(true);
+        conso_batterie1.setAnimationDuration(490);
+        conso_batterie2.setAnimated(true);
+        conso_batterie2.setAnimationDuration(490);
+        scrollbar_forward.valueProperty().addListener(new ChangeListener<Number>() {
             int old_value = 100;
+            String cmd;
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+
                 int accelerate = 100 - t1.intValue();
-                if (accelerate <= old_value-3 || accelerate >= old_value+3){
-                    String cmd = "a|"+accelerate + "|";
+                if (accelerate <= old_value-2 || accelerate >= old_value+2){
+                    cmd = "a|"+accelerate + "|";
+                    if(accelerate <=9)
+                        cmd = "a|0"+ accelerate + "|";
+                    if(accelerate == 100)
+                        cmd = "a|99|";
                     //System.out.println(cmd);
                     if(connection.Connection_State == 1)
                         connection.send_command(cmd);
@@ -198,18 +220,22 @@ public class HelloController {
 
         scrollbar_turn.valueProperty().addListener(new ChangeListener<Number>() {
             int old_value = 100;
+            String cmd;
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
                 int turn = t1.intValue();
-                if (turn<= old_value-3 || turn >=old_value+3){
-                    String cmd = "t|" + turn + "|";
-                    //System.out.println(cmd);
+                if (turn<= old_value-2 || turn >=old_value+2){
+                    cmd = "t|"+turn+ "|";
+                    if(turn <=9)
+                        cmd = "t|0"+turn+ "|";
+                    if(turn == 100)
+                        cmd = "t|99|";
                     if(connection.Connection_State == 1)
                         connection.send_command(cmd);
                     old_value = turn;
                 }
             }
-        });*/
+        });
         //graph settings
         Serie_Conso_Batterie1.setName("Puissance Moteur 1 en Watt");
         Serie_Conso_Batterie2.setName("Puissance Moteur 2 en Watt");
@@ -223,11 +249,13 @@ public class HelloController {
 
     public void ConnectButton() {
         long initial_time = System.currentTimeMillis();
+
         selected_value =  bluetooth_portlist.getValue();
         ConnectionPortTask.start();
         selected_value.addDataListener(new SerialPortDataListener() {
 
             int compteur = 0;
+
             final int WINDOW_SIZE = 50;
             @Override
             public void serialEvent(SerialPortEvent event) {
@@ -238,9 +266,10 @@ public class HelloController {
                     if(b != 0)
                         tram.append((char)b);
                 }
-                if (tram.indexOf("\n") != -1 & System.currentTimeMillis() > initial_time+1000){
+
+                if (tram.indexOf("\n") != -1 & System.currentTimeMillis() > initial_time+3000 & tram.indexOf("&")==0){
                     compteur++;
-                    //System.out.print(compteur + " -> "+ tram);
+                    System.out.print(compteur + " -> "+ tram);
                     for (int i = 0; i < tram.length(); i++) {
                         if (tram.charAt(i) == '&') {
                             list.add(i);
@@ -251,17 +280,22 @@ public class HelloController {
                         } else if (tram.charAt(i) == '^') {
                             list.add(i);
                         }
+                        else if (tram.charAt(i) == '*') {
+                            list.add(i);
+                        }
                     }
-                    if(list.size() == 8 & System.currentTimeMillis() > initial_time+1000){
+                    if(list.size() == 10 & System.currentTimeMillis() > initial_time+1000){
 
                         battery_Voltage = Float.parseFloat(tram.substring(list.get(0)+1,list.get(1)));
                         condensator_Voltage = Float.parseFloat(tram.substring(list.get(2)+1,list.get(3)));
                         Intensite_1 = Float.parseFloat(tram.substring(list.get(4)+1,list.get(5)));
                         Intensite_2 = Float.parseFloat(tram.substring(list.get(6)+1,list.get(7)));
-                        /*System.out.println("Batterie: "+battery_Voltage);
-                        System.out.println("Condo: " + condensator_Voltage);
-                        System.out.println("Ampere1: " + Intensite_1);
-                        System.out.println("Ampere2: " + Intensite_2);*/
+                        Speed = Float.parseFloat(tram.substring(list.get(8)+1,list.get(9)));
+                        //System.out.println("Batterie: "+battery_Voltage);
+                        //System.out.println("Condo: " + condensator_Voltage);
+                        //System.out.println("Ampere1: " + Intensite_1);
+                        //System.out.println("Ampere2: " + Intensite_2);
+                        //System.out.println(Speed);
                         list.clear();
 
                     Platform.runLater(() -> {
@@ -279,13 +313,14 @@ public class HelloController {
                             battery_level.setValue(0);
                         }
 
-                        Serie_Conso_Batterie1.getData().add(new XYChart.Data<>(String.valueOf(compteur), Intensite_1*-1));
-                        Serie_Conso_Batterie2.getData().add(new XYChart.Data<>(String.valueOf(compteur), Intensite_2*-1));
-                        Serie_Conso_Totale.getData().add(new XYChart.Data<>(String.valueOf(compteur), Intensite_2*-1+Intensite_1*-1));
-                        conso_batterie1.setValue(Intensite_1*-1);
-                        conso_batterie2.setValue(Intensite_2*-1);
+                        Serie_Conso_Batterie1.getData().add(new XYChart.Data<>(String.valueOf(compteur), Intensite_1));
+                        Serie_Conso_Batterie2.getData().add(new XYChart.Data<>(String.valueOf(compteur), Intensite_2));
+                        Serie_Conso_Totale.getData().add(new XYChart.Data<>(String.valueOf(compteur), Intensite_2+Intensite_1));
+                        conso_batterie1.setValue(Intensite_1);
+                        conso_batterie2.setValue(Intensite_2);
+                        speed.setValue(Speed);
                         if(Intensite_1*-1 + Intensite_2*-1 <= 50){
-                            conso_global.setValue(Intensite_1*-1 + Intensite_2*-1);
+                            conso_global.setValue(Intensite_1 + Intensite_2);
                             if(Intensite_1*-1 + Intensite_2*-1 < 34)
                                 conso_global.setBarColor(Blue_gauge);
                             else {
@@ -299,6 +334,10 @@ public class HelloController {
 
                     tram.setLength(0);
                 }
+                else if(tram.indexOf("\n") != -1){
+                    tram.setLength(0);
+                }
+
             }
 
             @Override

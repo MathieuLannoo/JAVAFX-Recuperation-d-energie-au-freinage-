@@ -65,7 +65,7 @@
                </children>
             </AnchorPane>
             <Gauge fx:id="conso_global" layoutX="320.0" layoutY="28.0" maxValue="50.0" oldValueVisible="true" prefHeight="361.0" prefWidth="414.0" skinType="SPACE_X" unit="Watt" />
-            <Gauge fx:id="speed" layoutX="761.0" layoutY="79.0" prefHeight="311.0" prefWidth="341.0" skinType="BAR" unit="Km/H" />
+            <Gauge fx:id="speed" layoutX="761.0" layoutY="79.0" maxValue="60.0" prefHeight="311.0" prefWidth="341.0" skinType="BAR" unit="Km/H" />
          </AnchorPane>
          <AnchorPane fx:id="Linegraph_BOX" prefHeight="309.0" prefWidth="1518.0">
             <children>
