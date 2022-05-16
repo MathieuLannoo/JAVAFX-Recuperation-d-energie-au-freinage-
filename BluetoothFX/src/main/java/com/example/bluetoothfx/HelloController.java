@@ -41,6 +41,8 @@ public class HelloController {
     Color Red_gauge = Color.RED;
     Color Back_grey = Color.valueOf("#e2e2e2");
 
+    int accelerate;
+
     float battery_Voltage;
     float condensator_Voltage;
     float Intensite_1;
@@ -147,13 +149,18 @@ public class HelloController {
                             //System.out.println(System.currentTimeMillis() - old_tick);
                             old_tick = System.currentTimeMillis();
                         }*/
-
-                        acceleration_gauge.setValue(100 - Xbox_gamepad.acceleration_gamepad);
-                        if(100-Xbox_gamepad.acceleration_gamepad > 95)
+                        if(Speed > 0 & (accelerate == 50 | accelerate == 51 | accelerate == 49)){
+                            acceleration_gauge.setBarColor(Color.GREEN);
+                            acceleration_gauge.setValue(100);
+                        }
+                        else if(100-Xbox_gamepad.acceleration_gamepad > 95) {
                             acceleration_gauge.setBarColor(Color.RED);
-                        else
-                            acceleration_gauge.setBarColor(Blue_gauge);
-
+                            acceleration_gauge.setValue(100 - Xbox_gamepad.acceleration_gamepad);
+                        }
+                        else{
+                        acceleration_gauge.setValue(100 - Xbox_gamepad.acceleration_gamepad);
+                        acceleration_gauge.setBarColor(Blue_gauge);
+                        }
                         direction_gauge.setValue(Xbox_gamepad.direction_gamepad);
                     });
                     if( !Xbox_gamepad.ConnectedGamepad.poll() ){
@@ -220,7 +227,7 @@ public class HelloController {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
 
-                int accelerate = 100 - t1.intValue();
+                accelerate = 100 - t1.intValue();
                 if (accelerate <= old_value-2 || accelerate >= old_value+2){
                     cmd = "a|"+accelerate + "|";
                     if(accelerate <=9)
@@ -286,7 +293,7 @@ public class HelloController {
 
                 if (tram.indexOf("\n") != -1 & System.currentTimeMillis() > initial_time+3000 & tram.indexOf("&")==0){
                     compteur++;
-                    System.out.print(compteur + " -> "+ tram);
+                    System.out.print(tram);
                     for (int i = 0; i < tram.length(); i++) {
                         if (tram.charAt(i) == '&') {
                             list.add(i);
@@ -313,6 +320,7 @@ public class HelloController {
                         //System.out.println("Ampere1: " + Intensite_1);
                         //System.out.println("Ampere2: " + Intensite_2);
                         //System.out.println(Speed);
+
                         list.clear();
 
                     Platform.runLater(() -> {
@@ -322,7 +330,7 @@ public class HelloController {
                             Serie_Conso_Batterie2.getData().remove(0);
                         if(Serie_Conso_Totale.getData().size() > WINDOW_SIZE)
                             Serie_Conso_Totale.getData().remove(0);
-
+                        speed.setValue(Speed);
                         if (battery_Voltage > 1){
                             battery_level.setValue((battery_Voltage - 7) * (100) / (9.25 - 7));
                         }
@@ -335,9 +343,14 @@ public class HelloController {
                         Serie_Conso_Totale.getData().add(new XYChart.Data<>(String.valueOf(compteur), Intensite_2+Intensite_1));
                         conso_batterie1.setValue(Intensite_1);
                         conso_batterie2.setValue(Intensite_2);
-                        gauge_recup_condo.setValue(condensator_Voltage);
-                        System.out.println(Speed);
-                        speed.setValue(Speed);
+
+                        if(accelerate == 50 | accelerate == 51 | accelerate == 49){
+                            gauge_recup_condo.setValue(condensator_Voltage);
+
+                        }
+                        else
+                            gauge_recup_condo.setValue(0);
+
                         if(Intensite_1*-1 + Intensite_2*-1 <= 50){
                             conso_global.setValue(Intensite_1 + Intensite_2);
                             if(Intensite_1*-1 + Intensite_2*-1 < 34)
