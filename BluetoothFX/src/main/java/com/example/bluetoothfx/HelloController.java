@@ -37,7 +37,10 @@ public class HelloController {
     StringBuilder tram = new StringBuilder();
     ArrayList<Integer> list = new ArrayList<>();
     Color Blue_gauge = Color.valueOf("#456ACF");
+    Color Back_blue = Color.valueOf("#dbe0ec");
     Color Red_gauge = Color.RED;
+    Color Back_grey = Color.valueOf("#e2e2e2");
+
     float battery_Voltage;
     float condensator_Voltage;
     float Intensite_1;
@@ -47,6 +50,8 @@ public class HelloController {
     long old_tick;
     boolean acc_dir = false;
 
+    @FXML
+    public Gauge gauge_recup_condo;
     @FXML
     public AnchorPane Linegraph_BOX;
     @FXML
@@ -176,17 +181,29 @@ public class HelloController {
         Linegraph_BOX.setVisible(false);
         battery_level.setAnimated(false);
         acceleration_gauge.setAnimated(false);
-        acceleration_gauge.setAnimationDuration(490);
+        acceleration_gauge.setAnimationDuration(400);
         direction_gauge.setAnimated(false);
-        direction_gauge.setAnimationDuration(490);
+        direction_gauge.setAnimationDuration(400);
+        gauge_recup_condo.setAnimated(true);
+        gauge_recup_condo.setAnimationDuration(400);
         speed.setAnimated(true);
-        speed.setAnimationDuration(490);
+        speed.setAnimationDuration(400);
         conso_global.setAnimated(true);
-        conso_global.setAnimationDuration(490);
+        conso_global.setAnimationDuration(400);
         connection_status_gauge.setAnimated(false);
         battery_level.setBarColor(Color.GREEN);
-        conso_batterie1.setBarColor(Blue_gauge);
-        conso_batterie2.setBarColor(Blue_gauge);
+        gauge_recup_condo.setBarColor(Color.GREEN);
+        conso_batterie1.setBarColor(Back_blue);
+        conso_batterie2.setBarColor(Back_blue);
+
+
+        conso_batterie1.setBarBackgroundColor(Back_grey);
+        conso_batterie2.setBarBackgroundColor(Back_grey);
+        gauge_recup_condo.setBarBackgroundColor(Back_grey);
+
+
+        conso_batterie1.setNeedleColor(Blue_gauge);
+        conso_batterie2.setNeedleColor(Blue_gauge);
         speed.setBarColor(Blue_gauge);
         conso_global.setBarColor(Blue_gauge);
         speed.setForegroundBaseColor(Color.BLACK);
@@ -194,9 +211,9 @@ public class HelloController {
 
         bluetooth_portlist.getItems().addAll(connection.ports);
         conso_batterie1.setAnimated(true);
-        conso_batterie1.setAnimationDuration(490);
+        conso_batterie1.setAnimationDuration(400);
         conso_batterie2.setAnimated(true);
-        conso_batterie2.setAnimationDuration(490);
+        conso_batterie2.setAnimationDuration(400);
         scrollbar_forward.valueProperty().addListener(new ChangeListener<Number>() {
             int old_value = 100;
             String cmd;
@@ -318,6 +335,8 @@ public class HelloController {
                         Serie_Conso_Totale.getData().add(new XYChart.Data<>(String.valueOf(compteur), Intensite_2+Intensite_1));
                         conso_batterie1.setValue(Intensite_1);
                         conso_batterie2.setValue(Intensite_2);
+                        gauge_recup_condo.setValue(condensator_Voltage);
+                        System.out.println(Speed);
                         speed.setValue(Speed);
                         if(Intensite_1*-1 + Intensite_2*-1 <= 50){
                             conso_global.setValue(Intensite_1 + Intensite_2);

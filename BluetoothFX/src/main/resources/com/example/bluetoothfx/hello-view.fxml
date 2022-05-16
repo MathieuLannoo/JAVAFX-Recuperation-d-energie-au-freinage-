@@ -17,6 +17,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="838.0" prefWidth="1550.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bluetoothfx.HelloController">
    <center>
@@ -27,23 +29,23 @@
          <AnchorPane prefHeight="500.0" prefWidth="1550.0">
             <ScrollBar fx:id="scrollbar_turn" layoutX="14.0" layoutY="384.0" onMouseReleased="#mouse_released" opacity="0.0" prefHeight="86.0" prefWidth="333.0" value="50.0" />
             <ScrollBar fx:id="scrollbar_forward" layoutX="1176.0" layoutY="188.0" onMouseReleased="#mouse_released" opacity="0.0" orientation="VERTICAL" prefHeight="282.0" prefWidth="96.0" value="50.0" />
-            <AnchorPane layoutX="1263.0" layoutY="360.0" prefHeight="102.0" prefWidth="161.0">
+            <AnchorPane layoutX="1174.0" layoutY="362.0" prefHeight="158.0" prefWidth="252.0">
                <children>
-                  <Gauge fx:id="direction_gauge" layoutX="118.0" layoutY="8.0" prefHeight="100.0" prefWidth="100.0" skinType="SIMPLE_SECTION" valueVisible="false" />
-                  <Gauge fx:id="acceleration_gauge" layoutX="14.0" layoutY="8.0" minValue="50.0" prefHeight="100.0" prefWidth="100.0" skinType="SIMPLE_SECTION" valueVisible="false" />
-                  <ImageView fx:id="pedale_png" fitHeight="50.0" fitWidth="50.0" layoutX="39.0" layoutY="33.0">
+                  <Gauge fx:id="direction_gauge" layoutX="118.0" layoutY="8.0" prefHeight="125.0" prefWidth="125.0" skinType="SIMPLE_SECTION" valueVisible="false" />
+                  <Gauge fx:id="acceleration_gauge" layoutX="-17.0" layoutY="8.0" minValue="50.0" prefHeight="125.0" prefWidth="125.0" skinType="SIMPLE_SECTION" valueVisible="false" />
+                  <ImageView fx:id="pedale_png" fitHeight="60.0" fitWidth="60.0" layoutX="16.0" layoutY="41.0">
                      <image>
                         <Image url="@photo/pedale.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="volant_png" fitHeight="50.0" fitWidth="50.0" layoutX="143.0" layoutY="33.0">
+                  <ImageView fx:id="volant_png" fitHeight="60.0" fitWidth="60.0" layoutX="151.0" layoutY="41.0">
                      <image>
                         <Image url="@photo/volant.png" />
                      </image>
                   </ImageView>
                </children>
             </AnchorPane>
-            <Gauge fx:id="battery_level" layoutX="1251.0" prefHeight="164.0" prefWidth="267.0" skinType="BATTERY" tickLabelsVisible="false">
+            <Gauge fx:id="battery_level" layoutX="1150.0" layoutY="10.0" prefHeight="164.0" prefWidth="267.0" skinType="BATTERY" tickLabelsVisible="false">
                <ledColor>
                   <Color red="0.21108771860599518" green="0.12460038810968399" blue="0.9894737005233765" />
                </ledColor>
@@ -57,15 +59,26 @@
                   <Color red="0.14459389448165894" green="0.08405458182096481" blue="0.8105263113975525" />
                </thresholdColor>
             </Gauge>
-            <AnchorPane layoutX="14.0" layoutY="325.0" prefHeight="114.0" prefWidth="303.0">
+            <AnchorPane layoutX="65.0" layoutY="325.0" prefHeight="114.0" prefWidth="303.0">
                <children>
-                  <Gauge fx:id="conso_batterie1" knobVisible="false" layoutX="7.0" layoutY="23.0" majorTickMarksVisible="false" maxValue="25.0" prefHeight="122.0" prefWidth="138.0" skinType="DASHBOARD" unit="Watt" />
-                  <Gauge fx:id="conso_batterie2" layoutX="165.0" layoutY="23.0" maxValue="25.0" prefHeight="122.0" prefWidth="138.0" skinType="DASHBOARD" unit="Watt" />
-                  <Line endX="182.20001220703125" layoutX="115.0" layoutY="130.0" opacity="0.75" startX="-100.0" stroke="#456acf" strokeWidth="2.0" />
+                  <Line endX="213.79998779296875" layoutX="76.0" layoutY="131.0" opacity="0.75" startX="-100.0" stroke="#456acf" strokeWidth="2.0" />
+                  <Gauge fx:id="conso_batterie2" layoutX="138.0" layoutY="6.0" maxValue="25.0" prefHeight="158.0" prefWidth="156.0" skinType="INDICATOR" />
+                  <Gauge fx:id="conso_batterie1" layoutX="-27.0" layoutY="6.0" maxValue="25.0" prefHeight="158.0" prefWidth="156.0" skinType="INDICATOR" />
+                  <Text layoutX="189.0" layoutY="155.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Motor 2" wrappingWidth="54.03204345703125">
+                     <font>
+                        <Font name="Arial" size="15.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="23.0" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Motor 1" wrappingWidth="54.03204345703125">
+                     <font>
+                        <Font name="Arial" size="15.0" />
+                     </font>
+                  </Text>
                </children>
             </AnchorPane>
             <Gauge fx:id="conso_global" layoutX="320.0" layoutY="28.0" maxValue="50.0" oldValueVisible="true" prefHeight="361.0" prefWidth="414.0" skinType="SPACE_X" unit="Watt" />
             <Gauge fx:id="speed" layoutX="761.0" layoutY="79.0" maxValue="60.0" prefHeight="311.0" prefWidth="341.0" skinType="BAR" unit="Km/H" />
+            <Gauge fx:id="gauge_recup_condo" knobVisible="false" layoutX="98.0" layoutY="49.0" majorTickMarksVisible="false" maxValue="2.0" prefHeight="126.0" prefWidth="176.0" skinType="DASHBOARD" unit="Volts" valueVisible="false" />
          </AnchorPane>
          <AnchorPane fx:id="Linegraph_BOX" prefHeight="309.0" prefWidth="1518.0">
             <children>
