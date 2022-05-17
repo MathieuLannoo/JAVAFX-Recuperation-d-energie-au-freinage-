@@ -25,10 +25,13 @@ import java.util.ArrayList;
 public class HelloController {
 
 
-
     XYChart.Series<String, Number> Serie_Conso_Totale = new XYChart.Series<>();
     XYChart.Series<String, Number> Serie_Conso_Batterie1 = new XYChart.Series<>();
     XYChart.Series<String, Number> Serie_Conso_Batterie2 = new XYChart.Series<>();
+    XYChart.Series<String, Number> Serie_speed = new XYChart.Series<>();
+    XYChart.Series<String, Number> Serie_condensator = new XYChart.Series<>();
+
+
     
     gamepad Xbox_gamepad;
     SerialPort selected_value;
@@ -49,9 +52,13 @@ public class HelloController {
     float Intensite_2;
     float Speed;
 
+    long tick;
     long old_tick;
     boolean acc_dir = false;
-
+    @FXML
+    public CheckBox checkbox_capacitor;
+    @FXML
+    public CheckBox checkbox_speed;
     @FXML
     public Gauge gauge_recup_condo;
     @FXML
@@ -121,7 +128,7 @@ public class HelloController {
                         scrollbar_forward.setValue(Xbox_gamepad.acceleration_gamepad);
                         scrollbar_turn.setValue(Xbox_gamepad.direction_gamepad);
 
-                        /*if (System.currentTimeMillis() > old_tick + 50){
+                       /* if (System.currentTimeMillis() > old_tick + 100){
                             if (acc_dir){
                                 String cmd = "a|" + Xbox_gamepad.acceleration_gamepad + "|";
                                 if(100-Xbox_gamepad.acceleration_gamepad <=9)
@@ -149,7 +156,7 @@ public class HelloController {
                             //System.out.println(System.currentTimeMillis() - old_tick);
                             old_tick = System.currentTimeMillis();
                         }*/
-                        if(Speed > 0 & (accelerate == 50 | accelerate == 51 | accelerate == 49)){
+                        if(Speed > 0 & (accelerate==52|accelerate==48|accelerate == 50 | accelerate == 51 | accelerate == 49)){
                             acceleration_gauge.setBarColor(Color.GREEN);
                             acceleration_gauge.setValue(100);
                         }
@@ -228,7 +235,7 @@ public class HelloController {
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
 
                 accelerate = 100 - t1.intValue();
-                if (accelerate <= old_value-2 || accelerate >= old_value+2){
+                if ((accelerate <= old_value-2 || accelerate >= old_value+2) && old_tick + 100 < System.currentTimeMillis()){
                     cmd = "a|"+accelerate + "|";
                     if(accelerate <=9)
                         cmd = "a|0"+ accelerate + "|";
@@ -238,6 +245,16 @@ public class HelloController {
                     if(connection.Connection_State == 1)
                         connection.send_command(cmd);
                     old_value = accelerate;
+                    old_tick = System.currentTimeMillis();
+                }
+                else if(accelerate == 50 || accelerate == 49 || accelerate ==51)
+                {
+                    cmd = "a|"+accelerate + "|";
+                    if(connection.Connection_State == 1)
+                        connection.send_command(cmd);
+                        old_value = accelerate;
+                        old_tick = System.currentTimeMillis();
+
                 }
             }
         });
@@ -261,13 +278,16 @@ public class HelloController {
             }
         });
         //graph settings
-        Serie_Conso_Batterie1.setName("Puissance Moteur 1 en Watt");
-        Serie_Conso_Batterie2.setName("Puissance Moteur 2 en Watt");
-        Serie_Conso_Totale.setName("Puissance Totale en Watt");
+        Serie_Conso_Batterie1.setName("Motor1 consumption in Watt");
+        Serie_Conso_Batterie2.setName("Motor2 consumption in Watt");
+        Serie_Conso_Totale.setName("Total consumption in Watt");
+        Serie_speed.setName("Speed in Km/h");
+        Serie_condensator.setName("Voltage capacitor in V");
         test_chart.setAnimated(false);
         test_chart.setCreateSymbols(false); //cache les points
         test_chart.setHorizontalGridLinesVisible(false);
         test_chart.setVerticalGridLinesVisible(false);
+        gauge_recup_condo.setDecimals(1);
 
     }
 
@@ -330,6 +350,10 @@ public class HelloController {
                             Serie_Conso_Batterie2.getData().remove(0);
                         if(Serie_Conso_Totale.getData().size() > WINDOW_SIZE)
                             Serie_Conso_Totale.getData().remove(0);
+                        if(Serie_condensator.getData().size() > WINDOW_SIZE)
+                            Serie_condensator.getData().remove(0);
+                        if(Serie_speed.getData().size() > WINDOW_SIZE)
+                            Serie_speed.getData().remove(0);
                         speed.setValue(Speed);
                         if (battery_Voltage > 1){
                             battery_level.setValue((battery_Voltage - 7) * (100) / (9.25 - 7));
@@ -340,6 +364,11 @@ public class HelloController {
 
                         Serie_Conso_Batterie1.getData().add(new XYChart.Data<>(String.valueOf(compteur), Intensite_1));
                         Serie_Conso_Batterie2.getData().add(new XYChart.Data<>(String.valueOf(compteur), Intensite_2));
+                        Serie_speed.getData().add(new XYChart.Data<>(String.valueOf(compteur),Speed));
+                        if(accelerate==52|accelerate==48|accelerate == 50 | accelerate == 51 | accelerate == 49)
+                            Serie_condensator.getData().add(new XYChart.Data<>(String.valueOf(compteur),condensator_Voltage));
+                        else
+                            Serie_condensator.getData().add(new XYChart.Data<>(String.valueOf(compteur),0));
                         Serie_Conso_Totale.getData().add(new XYChart.Data<>(String.valueOf(compteur), Intensite_2+Intensite_1));
                         conso_batterie1.setValue(Intensite_1);
                         conso_batterie2.setValue(Intensite_2);
@@ -413,6 +442,18 @@ public class HelloController {
             else
                 test_chart.getData().removeAll(Serie_Conso_Totale);
             }
+        else if(actionEvent.getSource() == checkbox_speed){
+            if(checkbox_speed.isSelected())
+                test_chart.getData().add(Serie_speed);
+            else
+                test_chart.getData().removeAll(Serie_speed);
+        }
+        else if(actionEvent.getSource() == checkbox_capacitor){
+            if(checkbox_capacitor.isSelected())
+                test_chart.getData().add(Serie_condensator);
+            else
+                test_chart.getData().removeAll(Serie_condensator);
+        }
 
     }
 
